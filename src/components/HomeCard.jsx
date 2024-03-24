@@ -1,22 +1,23 @@
 import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-function Card(product) {
+function HomeCard(props) {
   return (
     <>
-      <div className="w-full max-w-sm rounded-lg shadow-2xl hover:translate-y-2 duration-150 ease-in">
+      <div className="w-full max-w-sm bg-white  rounded-lg shadow-md shadow-slate-200 ">
         <img
-          className="px-2 pt-2 pb-3 rounded-2xl"
-          src={product.image}
+          className="pb-4 rounded-t-lg w-full"
+          src={props.image}
           alt="product image"
         />
 
-        <div className="px-2.5 pb-5 ">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-black mb-6 px-3">
-            {product.name}
-          </h5>
-
-          <div className="flex items-center mt-2.5 mb-5 px-3">
+        <div className="px-3 pb-5 m">
+          <a href="#">
+            <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-black mb-7">
+              {props.name}
+            </h5>
+          </a>
+          <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
               <svg
                 className="w-7 h-7 text-orange-200"
@@ -32,13 +33,13 @@ function Card(product) {
               5.0
             </span>
           </div>
-          <div className="flex items-center justify-between pr-3">
-            <span className="text-3xl font-bold text-gray-900 dark:text-black pl-3">
-              {product.price}$
+          <div className="flex items-center justify-between">
+            <span className="text-3xl font-bold text-gray-900 dark:text-black">
+              {props.price}$
             </span>
             <a
               href="#"
-              className="text-black flex items-center gap-2 font-montserrat text-lg bg-orange-200 hover:scale-110 duration-200  rounded-lg  px-2 py-2 text-center"
+              className="text-black flex items-center gap-3 bg-orange-200 hover:scale-110 duration-200 font-medium rounded-lg text-sm px-2 py-2 text-center"
             >
               Details
               <FaLongArrowAltRight />
@@ -50,4 +51,4 @@ function Card(product) {
   );
 }
 
-export default Card;
+export default HomeCard;

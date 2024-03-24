@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 
 function Allproducts() {
   const [allproducts, setAllProducts] = useState([]);
-  const { productId } = useParams();
 
   useEffect(() => {
     const displayProducts = async () => {
@@ -25,7 +24,7 @@ function Allproducts() {
   return (
     <>
       <div className="text-section w-full">
-        <h1 className="title text-8xl mb-8  mt-12 font-bold px-7 w-2/4">
+        <h1 className="title text-8xl w-full mb-8 font-bold px-7 mt-16">
           <span className=" text-orange-300 mr-2">F</span>IND OUT ALL OF OUR
           PRODUCTS
         </h1>
