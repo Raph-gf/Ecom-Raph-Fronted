@@ -5,9 +5,9 @@ import { RiSecurePaymentLine } from "react-icons/ri";
 import { FaHandsHelping } from "react-icons/fa";
 import { FaInstagram, FaTwitter, FaLinkedinIn, FaTiktok } from "react-icons/fa";
 import "../App.css";
-import Card from "../components/card";
+
 import { Link } from "react-router-dom";
-import HomeCard from "../components/HomeCard";
+import Card from "../components/Card";
 
 function Homepage() {
   const iconStyles = { color: "white", fontSize: "1.5em" };
