@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useSnackbar } from "notistack";
+import { closeSnackbar, useSnackbar } from "notistack";
 import ShoppingCard from "../components/ShoppingCard";
 
 function ShoppingCart() {
-  const { productId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const userData = JSON.parse(localStorage.getItem("user"));
   const userProfile = userData ? userData.firstname : "";
@@ -39,9 +38,12 @@ function ShoppingCart() {
       await axios.delete(
         `http://localhost:3456/products/${productId}/cart/${currentUser}`
       );
-      setShoppingCart(
-        shoppingCart.filter((product) => product._id !== productId)
+
+      console.log(productId);
+      const updateCart = shoppingCart.filter(
+        (product) => product._id !== productId
       );
+      setShoppingCart(updateCart);
       enqueueSnackbar("Produit supprimé avec succès du panier", {
         variant: "success",
         autoHideDuration: 2000,
@@ -55,13 +57,22 @@ function ShoppingCart() {
     }
   };
 
+  const totalProduct = () => {
+    if (shoppingCart.length === 0) {
+      return 0;
+    }
+    return shoppingCart
+      .reduce((acc, product) => acc + product.price, 0)
+      .toFixed(2);
+  };
+
   return (
     <section className="wrapper">
       <div className="text-5xl font-bold pl-10 mt-16 mb-11 text-gray-900 dark:text-black">
         Shopping Cart de {userProfile}
         <div className="totalPrice flex flex-col justify-center items-start">
           <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
-          {/* <p className="text-3xl font-normal">{allProductsPrice()}$</p>{" "} */}
+          <p className="text-3xl font-normal">{totalProduct()}$</p>{" "}
         </div>
       </div>
       <div className="grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7">
