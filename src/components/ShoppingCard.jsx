@@ -2,20 +2,6 @@ import React, { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 
 function ShoppingCard(product) {
-  const [quantity, setQuantity] = useState(product.quantity);
-  // console.log(product.quantity);
-
-  // const addQuantity = () => {
-  //   setQuantity((quantity += 1));
-  //   console.log("Quantité augmentée :", quantity + 1);
-  // };
-
-  // const removeQuantity = () => {
-  //   if (quantity > 1) {
-  //     setQuantity(quantity - 1);
-  //     console.log("Quantité réduite :", quantity - 1);
-  //   }
-  // };
   return (
     <div className="w-full max-w-sm bg-white rounded-lg shadow-md shadow-slate-200">
       <img

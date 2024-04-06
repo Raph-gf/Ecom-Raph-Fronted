@@ -9,7 +9,7 @@ function ShoppingCart() {
   const userData = JSON.parse(localStorage.getItem("user"));
   const userProfile = userData ? userData.firstname : "";
   const userId = localStorage.getItem("user");
-  const currentUser = JSON.parse(userId)._id;
+  const currentUser = userId ? JSON.parse(userId)._id : null;
   const [shoppingCart, setShoppingCart] = useState([]);
 
   useEffect(() => {
@@ -30,7 +30,6 @@ function ShoppingCart() {
     };
     fetchUserCartProducts();
   }, [currentUser, enqueueSnackbar]);
-  console.log(shoppingCart);
 
   // Fonction pour supprimer un produit du panier
   const removeProductFromCart = async (productId) => {
@@ -62,39 +61,41 @@ function ShoppingCart() {
       return 0;
     }
     return shoppingCart
-      .reduce((acc, product) => acc + product.price, 0)
+      .reduce((acc, product) => acc + product.price * product.quantity, 0)
       .toFixed(2);
   };
 
   return (
-    <section className="wrapper">
-      <div className="text-5xl font-bold pl-10 mt-16 mb-11 text-gray-900 dark:text-black">
+    <section className="cart-wrapper">
+      <div className="cart-header text-5xl font-bold pl-10 mt-16 mb-11 text-gray-900 dark:text-black">
         Shopping Cart de {userProfile}
-        <div className="totalPrice flex flex-col justify-center items-start">
+        <div className="total-price flex flex-col justify-center items-start">
           <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
           <p className="text-3xl font-normal">{totalProduct()}$</p>{" "}
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7">
-        {shoppingCart.length > 0 ? (
-          shoppingCart.map((product, index) => (
-            <ShoppingCard
-              key={index}
-              image={product.images}
-              name={product.name}
-              price={product.price}
-              quantity={product.quantity}
-              description={product.description}
-              deleteFromCart={() => removeProductFromCart(product._id)}
-            />
-          ))
-        ) : (
-          <div className="erreur flex justify-center items-center">
-            <p className="text-6xl text-black pt-28 flex justify-center items-center text-center">
-              Aucun produit dans le panier
-            </p>
-          </div>
-        )}
+      <div className="content-wrapper">
+        <div className="product-grid grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7">
+          {shoppingCart.length > 0 ? (
+            shoppingCart.map((product, index) => (
+              <ShoppingCard
+                key={index}
+                image={product.images}
+                name={product.name}
+                price={product.price}
+                quantity={product.quantity}
+                description={product.description}
+                deleteFromCart={() => removeProductFromCart(product._id)}
+              />
+            ))
+          ) : (
+            <div className="empty-cart flex justify-center items-center h-full">
+              <p className="no-product-text text-6xl text-black text-center">
+                Aucun produit dans le panier
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

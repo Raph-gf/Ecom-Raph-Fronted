@@ -37,13 +37,10 @@ function Card(product) {
             <span className="text-3xl font-bold text-gray-900 dark:text-black pl-3">
               {product.price}$
             </span>
-            <a
-              href="#"
-              className="text-black flex items-center gap-2 font-montserrat text-lg bg-orange-200 hover:scale-110 duration-200  rounded-lg  px-2 py-2 text-center"
-            >
+            <button className="text-black flex items-center gap-2 font-montserrat text-lg bg-orange-200 hover:scale-110 duration-200  rounded-lg  px-2 py-2 text-center">
               Details
               <FaLongArrowAltRight />
-            </a>
+            </button>
           </div>
         </div>
       </div>
