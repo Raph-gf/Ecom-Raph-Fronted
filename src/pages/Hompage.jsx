@@ -5,7 +5,6 @@ import { RiSecurePaymentLine } from "react-icons/ri";
 import { FaHandsHelping } from "react-icons/fa";
 import { FaInstagram, FaTwitter, FaLinkedinIn, FaTiktok } from "react-icons/fa";
 import "../App.css";
-
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
 
@@ -86,7 +85,7 @@ function Homepage() {
             <Link to={`/products/${product._id}`} key={index}>
               <Card
                 key={index}
-                image={product.image}
+                image={product.images}
                 name={product.name}
                 price={product.price}
                 description={product.description}

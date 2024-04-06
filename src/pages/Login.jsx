@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useSnackbar } from "notistack";
 
 function Login() {
+  const { enqueueSnackbar } = useSnackbar();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
@@ -28,6 +30,10 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(response.data.user));
       localStorage.setItem("token", JSON.stringify(response.data.token));
       setToken(response.data.token);
+      enqueueSnackbar("User successfully connected", {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
       navigate("/");
     } catch (error) {
       console.error(error);

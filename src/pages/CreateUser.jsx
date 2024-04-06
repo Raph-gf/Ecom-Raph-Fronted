@@ -1,55 +1,49 @@
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [zipCode, setZipcode] = useState("");
-  const [Adress, setAdress] = useState("");
-  const [token, setToken] = useState("");
+function CreateUser() {
+  const [firstname, setFirstname] = useState();
+  const [lastname, setLastname] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [zipCode, setZipCode] = useState();
+  const [Adress, setAdress] = useState();
+
+  const [newuser, setNewuser] = useState();
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
-  }, []);
-
-  const handleSignIn = async (e) => {
-    e.preventDefault();
+  const createUser = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3456/users/inscription",
-        {
-          email,
-          password,
-          firstname,
-          lastname,
-          zipCode,
-          Adress,
-        }
-      );
+      const response = await axios.post(`http://localhost:3456/users/create`, {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password,
+        zipCode: zipCode,
+        Adress: Adress,
+      });
+      setNewuser(response.data);
       console.log(response.data);
-      localStorage.setItem("token", JSON.stringify(response.data.createToken));
-      // localStorage.setItem("newuser", JSON.stringify(response.data.newuser));
-      // localStorage.setItem(
-      //   "newuserId",
-      //   JSON.stringify(response.data.newuserId)
-      // );
-      setToken(response.data.token);
-      enqueueSnackbar("Sign-in succefully completed", {
+      setFirstname("");
+      setLastname("");
+      setEmail("");
+      setPassword("");
+      setZipCode("");
+      setAdress("");
+      enqueueSnackbar("User successfully created", {
         variant: "success",
         autoHideDuration: 2000,
       });
-      navigate("/login");
+      navigate("/users");
     } catch (error) {
+      enqueueSnackbar("Failed to create User", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
       console.error(error);
-      console.log("Email deja existant");
     }
   };
 
@@ -58,22 +52,12 @@ function SignIn() {
       <section className="relative flex flex-wrap px-8 lg:h-screen lg:items-center">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
-            <h1 className="text-8xl font-bold sm:text-3xl">
-              Get started today!
-            </h1>
-
-            <p className="mt-4 text-gray-500">
-              Bienvenue sur ECOM-RAPH ! Créez votre compte ou connectez vous dès
-              maintenant pour bénéficier d'offres spéciales et recevoir les
-              dernières nouvelles concernant nos nouveaux produits à venir.
-              Abonnez-vous également à notre newsletter pour rester informé(e)
-              des prochaines nouveautés.
-            </p>
+            <h1 className="text-8xl font-bold sm:text-3xl">Create User Form</h1>
           </div>
 
           <form
             action="#"
-            onSubmit={handleSignIn}
+            onSubmit={createUser}
             className="mx-auto mb-0 mt-8 max-w-md space-y-4"
           >
             {/* Input pour le FirstName */}
@@ -187,7 +171,7 @@ function SignIn() {
                   className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter zipCode"
                   value={zipCode}
-                  onChange={(e) => setZipcode(e.target.value)}
+                  onChange={(e) => setZipCode(e.target.value)}
                 />
               </div>
             </div>
@@ -209,34 +193,19 @@ function SignIn() {
             {/* Bouton de soumission */}
             <div className="flex items-center justify-between mt-24">
               <p className="text-sm text-gray-500">No account?</p>
-              <Link
-                to="/login"
-                className="underline text-sm text-gray-500"
-                href="#"
-              >
-                Login
-              </Link>
+
               <button
                 type="submit"
                 className="inline-block rounded-lg bg-orange-200 px-5 py-3 text-sm font-medium text-black"
               >
-                Sign in
+                create user
               </button>
             </div>
           </form>
-        </div>
-
-        {/* Image à droite */}
-        <div className="relative h-40 w-full  sm:h-96 lg:h-full lg:w-1/2">
-          <img
-            alt=""
-            src="https://images.unsplash.com/photo-1630450202872-e0829c9d6172?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto"
-            className="img h-full w-full rounded-md mt-9 object-cover"
-          />
         </div>
       </section>
     </>
   );
 }
 
-export default SignIn;
+export default CreateUser;
