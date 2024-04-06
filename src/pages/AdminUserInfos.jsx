@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaCircleUser } from "react-icons/fa6";
 import { useSnackbar } from "notistack";
+import AdminUserModal from "../components/AdminUserModal";
 
 function UserInfos() {
   const iconStyles = { fontSize: "10rem" };
