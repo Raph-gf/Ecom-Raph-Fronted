@@ -8,6 +8,8 @@ import { SiReactivex } from "react-icons/si";
 import { FaPlus } from "react-icons/fa6";
 import { FiMinus } from "react-icons/fi";
 
+import { Carousel } from "flowbite-react";
+
 function ProductDetails() {
   // Utilisation du hook useSnackbar pour afficher des notifications
   const { enqueueSnackbar } = useSnackbar();
@@ -73,11 +75,23 @@ function ProductDetails() {
           {/* Section de l'image du produit */}
           <div className="product-image md:w-1/2 md:mb-0">
             <div className="rounded-lg h-[700px] bg-gray-200">
-              <img
-                className="w-full h-full object-fill rounded-lg"
-                src={product.images}
-                alt="Product Image"
-              />
+              <Carousel>
+                <img
+                  className="w-full h-full object-fill rounded-lg"
+                  src={product.images[0]}
+                  alt="Product Image"
+                />
+                <img
+                  className="w-full h-full object-fill rounded-lg"
+                  src={product.images[1]}
+                  alt="Product Image"
+                />
+                <img
+                  className="w-full h-full object-fill rounded-lg"
+                  src={product.images[2]}
+                  alt="Product Image"
+                />
+              </Carousel>
             </div>
           </div>
 
