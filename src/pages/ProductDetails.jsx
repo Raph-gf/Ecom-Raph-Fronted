@@ -4,19 +4,30 @@ import { useNavigate, useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import { IoCartOutline } from "react-icons/io5";
 import { useSnackbar } from "notistack";
+import { SiReactivex } from "react-icons/si";
+import { FaPlus } from "react-icons/fa6";
+import { FiMinus } from "react-icons/fi";
 
 function ProductDetails() {
+  // Utilisation du hook useSnackbar pour afficher des notifications
   const { enqueueSnackbar } = useSnackbar();
-  const [product, setProduct] = useState(null);
-  const [cart, setCart] = useState([]);
-  const { productId } = useParams();
-  console.log(productId);
-  const navigate = useNavigate();
 
+  // État local pour stocker les informations du produit
+  const [product, setProduct] = useState(null);
+
+  // État local pour stocker les produits dans le panier
+  const [cart, setCart] = useState([]);
+
+  // Récupération de l'identifiant du produit depuis l'URL
+  const { productId } = useParams();
+
+  // Récupération de l'identifiant de l'utilisateur depuis le stockage local
   const userId = localStorage.getItem("user");
   const user = JSON.parse(userId);
   const currentUser = user._id;
+  const iconStyles = { color: "black", fontSize: "1.3em" };
 
+  // Hook useEffect pour charger les détails du produit lorsque le composant est monté
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -24,7 +35,6 @@ function ProductDetails() {
           `http://localhost:3456/products/${productId}`
         );
         setProduct(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -33,17 +43,13 @@ function ProductDetails() {
     fetchProduct();
   }, [productId]);
 
-  if (!product) {
-    return <ErrorPage />;
-  }
-
+  // Fonction pour ajouter le produit au panier
   const addProductToCart = async () => {
     try {
       const response = await axios.post(
         `http://localhost:3456/products/${productId}/addToCart/${currentUser}`
       );
       setCart(response.data);
-      console.log(response.data);
       enqueueSnackbar("Product successfully added to cart", {
         variant: "success",
         autoHideDuration: 2000,
@@ -54,50 +60,75 @@ function ProductDetails() {
     }
   };
 
+  // Si le produit n'est pas chargé, afficher une page d'erreur
+  if (!product) {
+    return <ErrorPage />;
+  }
+
+  // Affichage des détails du produit
   return (
     <>
-      <div className=" py-8 my-auto">
-        <div className="max-w-6xl mx-10 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-row justify-between  md:flex-row -mx-4">
-            <div className="md:flex-1 px-4">
-              <div className="h-[460px] rounded-lg  dark:bg-gray-700 mb-4">
-                <img
-                  className="w-full h-full object-cover rounded-lg"
-                  src={product.images}
-                  alt="Product Image"
-                />
+      <div className="product-container ">
+        <div className="flex flex-row justify-between  gap-4 px-12 py-10 md:flex-no-wrap">
+          {/* Section de l'image du produit */}
+          <div className="product-image md:w-1/2 md:mb-0">
+            <div className="rounded-lg h-[700px] bg-gray-200">
+              <img
+                className="w-full h-full object-fill rounded-lg"
+                src={product.images}
+                alt="Product Image"
+              />
+            </div>
+          </div>
+
+          {/* Section des détails du produit */}
+          <div className="product-details md:w-1/2 px-4">
+            <div className="website-name flex items-center gap-3 text-orange-300 pt-9 pb-6">
+              ECOM
+              <div className="icon">
+                <SiReactivex />
               </div>
-              <div className="flex -mx-2 mb-4">
-                <div className="w-full px-2 ">
-                  <button
-                    onClick={addProductToCart}
-                    className="w-full flex flex-row gap-2 items-center justify-center bg-black text-white py-4 px-4 rounded-full font-bold hover:bg-orange-200 hover:text-black"
-                  >
-                    Add to Cart
-                    <IoCartOutline />
-                  </button>
-                </div>
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">
+                RAPH
+              </span>
+            </div>
+            <h2 className="product-name text-6xl font-bold w-full text-black mb-10">
+              {product.name}
+            </h2>
+            <div>
+              <p className="font-bold text-black">Description:</p>
+              <p className="product-description text-black text-sm mt-2 mb-8">
+                {product.description}
+              </p>
+            </div>
+            <div className="product-price flex pb-8 mb-4">
+              <div className="text-black">
+                <span className="price-value text-5xl  font-bold text-black">
+                  ${product.price}
+                </span>
               </div>
             </div>
-            <div className="md:flex-1 px-4">
-              <h2 className="text-6xl font-bold text-black mb-10">
-                {product.name}
-              </h2>
-
-              <div>
-                <p className="font-bold text-black">Description:</p>
-                <p className="text-black  text-sm mt-2 mb-8">
-                  {product.description}
-                </p>
-              </div>
-
-              <div className="flex mb-4">
-                <div className="mr-4 text-black">
-                  <span className=" text-5xl font-bold text-black">
-                    {product.price}$
-                  </span>
+            {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
+            <div className="flex gap-7 w-full">
+              <div className="quantity flex rounded-md bg-orange-300">
+                <button className="remove-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md">
+                  <FiMinus style={iconStyles} />
+                </button>
+                <div className="quantity-number flex items-center p-5 font-bold">
+                  {product.quantity}
                 </div>
+
+                <button className="add-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md ">
+                  <FaPlus style={iconStyles} />
+                </button>
               </div>
+
+              <button
+                onClick={addProductToCart}
+                className="add-to-cart-btn flex items-center justify-center w-full p-4 gap-4 rounded-md bg-black text-white font-bold shadow-2xl hover:bg-orange-200 hover:text-black "
+              >
+                Add to Cart <IoCartOutline />
+              </button>
             </div>
           </div>
         </div>
