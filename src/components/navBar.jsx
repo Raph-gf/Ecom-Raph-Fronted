@@ -47,7 +47,7 @@ function NavBar() {
                 <li className="menu-item flex flex-row">
                   <Link
                     to="/"
-                    className="py-2 px-3 rounded md:bg-transparent md:p-0 text-orange-400 flex flex-row items-center gap-1"
+                    className="py-2 px-3 rounded md:bg-transparent md:p-0 text-orange-400 flex flex-row items-center gap-1 hover:text-orange-400"
                     aria-current="page"
                   >
                     <TiHome />
@@ -56,7 +56,7 @@ function NavBar() {
                 </li>
                 <li>
                   <Link to="/users">
-                    <button className="menu-button py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                    <button className="menu-button py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-400 md:p-0 dark:text-black md:dark:hover:text-orange-400 hover:text-orange-400 md:dark:hover:bg-transparent">
                       Users
                     </button>
                   </Link>
@@ -64,7 +64,7 @@ function NavBar() {
                 <li>
                   <Link
                     to="/admin/all-products"
-                    className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-400 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                   >
                     Products
                   </Link>
@@ -81,7 +81,7 @@ function NavBar() {
                 <li>
                   <button
                     onClick={Logout}
-                    className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-400 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                   >
                     Logout
                   </button>

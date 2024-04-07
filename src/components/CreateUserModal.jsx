@@ -1,45 +1,42 @@
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { useParams } from "react-router-dom";
 
-function AdminEditUserModal() {
+function CreateUserModal() {
   const [openModal, setOpenModal] = useState(false);
-  const [firstname, setFirstname] = useState();
-  const [lastname, setLastname] = useState();
-  const [email, setEmail] = useState();
-  const [zipCode, setZipCode] = useState();
-  const [Adress, setAddress] = useState();
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [Adress, setAdress] = useState("");
+  const [password, setPassword] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const { userID } = useParams();
-  console.log(userID);
 
-  const updateUserInfos = async () => {
+  const createUser = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:3456/users/${userID}/update`,
-        {
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          zipCode: zipCode,
-          Adress: Adress,
-        }
-      );
+      const response = await axios.post(`http://localhost:3456/users/create`, {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password,
+        zipCode: zipCode,
+        Adress: Adress,
+      });
       console.log(response.data);
       setFirstname("");
       setLastname("");
       setEmail("");
+      setPassword("");
       setZipCode("");
-      setAddress("");
-      setOpenModal(false);
-      enqueueSnackbar("User successfully updated", {
+      setAdress("");
+      enqueueSnackbar("User successfully created", {
         variant: "success",
-        autoHideDuration: 2500,
+        autoHideDuration: 2000,
       });
+      setOpenModal(false);
     } catch (error) {
-      enqueueSnackbar("Failed to update User", {
+      enqueueSnackbar("Failed to create User", {
         variant: "error",
         autoHideDuration: 2000,
       });
@@ -49,7 +46,7 @@ function AdminEditUserModal() {
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Edit</Button>
+      <Button onClick={() => setOpenModal(true)}>Create user</Button>
       <Modal
         show={openModal}
         size="2xl"
@@ -62,71 +59,72 @@ function AdminEditUserModal() {
             action="#"
             onSubmit={(e) => {
               e.preventDefault();
-              updateUserInfos();
+              createUser();
             }}
             className="mx-auto mb-0 mt-8 max-w-md space-y-4"
           >
             <div className="space-y-6">
               <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-                Edit user informations
+                Create User
               </h3>
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="firstname" value="First Name" />
-                </div>
+                <Label htmlFor="firstname" value="First Name" />
                 <TextInput
                   id="firstname"
-                  placeholder="enter first name"
+                  placeholder="Enter first name"
                   value={firstname}
                   onChange={(event) => setFirstname(event.target.value)}
                 />
               </div>
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="lastname" value="Last Name" />
-                </div>
+                <Label htmlFor="lastname" value="Last Name" />
                 <TextInput
                   id="lastname"
-                  placeholder="enter last name"
+                  placeholder="Enter last name"
                   value={lastname}
                   onChange={(event) => setLastname(event.target.value)}
                 />
               </div>
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="email" value="Email" />
-                </div>
+                <Label htmlFor="email" value="Email" />
                 <TextInput
                   id="email"
-                  placeholder="enter email"
+                  placeholder="Enter email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
               </div>
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="zipCode" value="Zip Code" />
-                </div>
+                <Label htmlFor="password" value="Password" />
+                <TextInput
+                  type="password"
+                  id="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="zipCode" value="Zip Code" />
                 <TextInput
                   id="zipCode"
-                  placeholder="enter zip code"
+                  placeholder="Enter zip code"
                   value={zipCode}
                   onChange={(event) => setZipCode(event.target.value)}
                 />
               </div>
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="address" value="Address" />
-                </div>
+                <Label htmlFor="address" value="Address" />
                 <TextInput
                   id="address"
-                  placeholder="enter adress"
+                  placeholder="Enter address"
                   value={Adress}
-                  onChange={(event) => setAddress(event.target.value)}
+                  onChange={(event) => setAdress(event.target.value)}
                 />
               </div>
               <div className="w-full">
-                <Button type="submit">Update User</Button>
+                <Button type="submit">Create User</Button>
               </div>
             </div>
           </form>
@@ -135,4 +133,5 @@ function AdminEditUserModal() {
     </>
   );
 }
-export default AdminEditUserModal;
+
+export default CreateUserModal;

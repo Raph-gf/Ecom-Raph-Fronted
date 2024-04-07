@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import ErrorPage from "./ErrorPage";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { FaCircleUser } from "react-icons/fa6";
 import { useSnackbar } from "notistack";
-import AdminUserModal from "../components/AdminUserModal";
+import { Card, Dropdown, Button } from "flowbite-react";
+import { Avatar } from "flowbite-react";
+import AdminEditUserModal from "../components/AdminUserModal";
+import DeletePopup from "../components/DeletePopupModal";
 
 function UserInfos() {
   const iconStyles = { fontSize: "10rem" };
@@ -100,216 +102,37 @@ function UserInfos() {
   };
   return (
     <>
-      <section class="pt-16 bg-blueGray-50 flex">
-        <div class=" lg:w-4/12 pl-10 ">
-          <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
-            <div class="px-6">
-              <div class="flex flex-wrap justify-center">
-                <div class="w-full px-4 flex justify-center">
-                  <div class="relative">
-                    <FaCircleUser style={iconStyles} />
-                  </div>
-                </div>
-              </div>
-              <div class="text-center mt-12">
-                <h3 class="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">
-                  {userinfos.firstname}
-                </h3>
-                <h2 class="text-xl font-semibold leading-normal  text-blueGray-700 mb-4">
-                  {userinfos.lastname}
-                </h2>
-                <h4 class="text-xl font-semibold leading-normal  text-blueGray-700 mb-4">
-                  {userinfos.Adress}
-                </h4>
-                <h4 class="text-xl font-semibold leading-normal  text-blueGray-700 mb-4">
-                  {userinfos.zipCode}
-                </h4>
-                <div class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                  <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-                  {userinfos.email}
-                </div>
-              </div>
-              <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
-                <div class="flex flex-wrap justify-center">
-                  <div class="w-full lg:w-9/12 px-4">
-                    <p class="mb-4 text-lg leading-relaxed text-blueGray-700">
-                      👋 Hi !! I am {userinfos.firstname} nice to meet you
-                    </p>
-                    <div className="controls flex  justify-center gap-5 mt-3">
-                      <button
-                        class="font-normal text-orange-500"
-                        onClick={() => setShowModal((prevState) => !prevState)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        class=" delete-button text-red-500 "
-                        onClick={deleteUser}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <Card className="">
+        <div className="flex justify-end px-4 pt-4"></div>
+        <div className="flex flex-col items-center pb-10">
+          <Avatar />
+          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+            {userinfos.firstname}
+          </h5>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {userinfos.lastname}
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {userinfos.email}
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {userinfos.zipCode}
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {userinfos.Adress}
+          </span>
+          <p className="mb-4 text-sm leading-relaxed text-blueGray-700">
+            👋 Hi !! I am {userinfos.firstname} nice to meet you
+          </p>
+          <div className="mt-4 flex space-x-3 lg:mt-6">
+            <AdminEditUserModal />
+            <DeletePopup
+              deleteUser={deleteUser}
+              firstname={userinfos.firstname}
+            />
           </div>
         </div>
-
-        {showModal && (
-          <section className=" w-screen flex flex-col px-8 lg:h-screen lg:items-center">
-            <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
-              <div className="mx-auto max-w-lg text-center"></div>
-
-              <form
-                action="#"
-                onSubmit={updateUserInfos}
-                className="mx-auto mb-0 mt-8 max-w-md space-y-4"
-              >
-                {/* Input pour le FirstName */}
-                <div>
-                  <label htmlFor="firstname" className="sr-only">
-                    FirstName
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                      placeholder="Enter First Name"
-                      value={firstname}
-                      onChange={(e) => setFirstname(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                {/* Input pour le LastName*/}
-                <div>
-                  <label htmlFor="LastName" className="sr-only">
-                    LastName
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                      placeholder="Enter LastName"
-                      value={lastname}
-                      onChange={(e) => setLastname(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Input 3 pour l'email */}
-                <div>
-                  <label htmlFor="email" className="sr-only">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                      placeholder="Enter email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {/* Icône pour l'email */}
-                    <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-4 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-                {/* Input pour le mot de passe */}
-                <div>
-                  <label htmlFor="password" className="sr-only">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="password"
-                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                      placeholder="Enter password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-4 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-                {/* Input pour le zipCode */}
-                <div>
-                  <label htmlFor="zipCode" className="sr-only">
-                    zipCode
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                      placeholder="Enter zipCode"
-                      value={zipCode}
-                      onChange={(e) => setZipCode(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Input pour l'Adresse */}
-                <div>
-                  <label htmlFor="Adress" className="sr-only">
-                    Adress
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                      placeholder="Enter adress"
-                      value={Adress}
-                      onChange={(e) => setAdress(e.target.value)}
-                    />
-                  </div>
-                </div>
-                {/* Bouton de soumission */}
-                <div className="flex items-center justify-between mt-24">
-                  <button
-                    type="submit"
-                    className=" rounded-lg bg-orange-200 px-5 py-3 text-sm font-medium text-black"
-                  >
-                    Update profile
-                  </button>
-                </div>
-              </form>
-            </div>
-          </section>
-        )}
-      </section>
+      </Card>
     </>
   );
 }
