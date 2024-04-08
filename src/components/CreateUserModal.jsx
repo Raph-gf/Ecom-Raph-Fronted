@@ -2,6 +2,7 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { GoPlus } from "react-icons/go";
 
 function CreateUserModal() {
   const [openModal, setOpenModal] = useState(false);
@@ -46,10 +47,15 @@ function CreateUserModal() {
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Create user</Button>
+      <div className="btn flex gap-1 hover:text-orange-400 ">
+        <GoPlus fontSize="1.2rem" />
+        <button className="bg-none text-xs" onClick={() => setOpenModal(true)}>
+          Create user
+        </button>
+      </div>
       <Modal
         show={openModal}
-        size="2xl"
+        size="xl"
         onClose={() => setOpenModal(false)}
         popup
       >

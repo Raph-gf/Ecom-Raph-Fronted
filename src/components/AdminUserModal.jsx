@@ -52,7 +52,7 @@ function AdminEditUserModal() {
       <Button onClick={() => setOpenModal(true)}>Edit</Button>
       <Modal
         show={openModal}
-        size="2xl"
+        size="sm"
         onClose={() => setOpenModal(false)}
         popup
       >

@@ -22,6 +22,7 @@ function ProductDetails() {
 
   // Récupération de l'identifiant du produit depuis l'URL
   const { productId } = useParams();
+  const navigate = useNavigate();
 
   // Récupération de l'identifiant de l'utilisateur depuis le stockage local
   const userId = localStorage.getItem("user");
@@ -37,6 +38,8 @@ function ProductDetails() {
           `http://localhost:3456/products/${productId}`
         );
         setProduct(response.data);
+        console.log(response.data);
+        console.log(response.data.quantity);
       } catch (error) {
         console.error(error);
       }
@@ -44,6 +47,8 @@ function ProductDetails() {
 
     fetchProduct();
   }, [productId]);
+
+  // let [quantity, setQuantity] = useState(product.quantity);
 
   // Fonction pour ajouter le produit au panier
   const addProductToCart = async () => {
@@ -62,12 +67,14 @@ function ProductDetails() {
     }
   };
 
-  // Si le produit n'est pas chargé, afficher une page d'erreur
   if (!product) {
     return <ErrorPage />;
   }
 
-  // Affichage des détails du produit
+  let addQuantity = () => {
+    setQuantity += 1;
+  };
+
   return (
     <>
       <div className="product-container ">
@@ -132,7 +139,10 @@ function ProductDetails() {
                   {product.quantity}
                 </div>
 
-                <button className="add-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md ">
+                <button
+                  onClick={addQuantity}
+                  className="add-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md "
+                >
                   <FaPlus style={iconStyles} />
                 </button>
               </div>

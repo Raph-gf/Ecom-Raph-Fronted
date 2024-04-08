@@ -24,12 +24,9 @@ function AdminUsers() {
 
   return (
     <>
-      <div className="users flex gap-10 justify-center items-center text-3xl px-10 mb-10">
+      <div className="users flex flex-col gap-10 justify-center items-center text-3xl px-10 mb-10">
         <h1>Users</h1>
-
-        <button type="button" class=" ">
-          <CreateUserModal />
-        </button>
+        <CreateUserModal />
       </div>
       {users.map((user, index) => (
         <Link to={`/users/${user._id}`} key={index}>
