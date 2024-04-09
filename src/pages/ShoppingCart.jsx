@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import { closeSnackbar, useSnackbar } from "notistack";
-import ShoppingCard from "../components/ShoppingCard";
+import { MdDeleteForever } from "react-icons/md";
+import ShoppingProductCard from "../components/ShoppingProductCard";
 
 function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
@@ -18,8 +18,8 @@ function ShoppingCart() {
         const response = await axios.get(
           `http://localhost:3456/products/${currentUser}/cart`
         );
-        setShoppingCart(response.data.Cart.products);
-        console.log(response.data);
+        console.log(response.data.products);
+        setShoppingCart(response.data.products);
       } catch (error) {
         console.error(error);
         enqueueSnackbar("Erreur lors de la récupération du panier", {
@@ -34,15 +34,11 @@ function ShoppingCart() {
   // Fonction pour supprimer un produit du panier
   const removeProductFromCart = async (productId) => {
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `http://localhost:3456/products/${productId}/cart/${currentUser}`
       );
-
-      console.log(productId);
-      const updateCart = shoppingCart.filter(
-        (product) => product._id !== productId
-      );
-      setShoppingCart(updateCart);
+      console.log(response.data);
+      setShoppingCart(response.data);
       enqueueSnackbar("Produit supprimé avec succès du panier", {
         variant: "success",
         autoHideDuration: 2000,
@@ -57,11 +53,12 @@ function ShoppingCart() {
   };
 
   const totalProduct = () => {
-    if (shoppingCart.length === 0) {
+    if (!Array.isArray(shoppingCart) || shoppingCart.length === 0) {
       return 0;
     }
+    console.log(shoppingCart);
     return shoppingCart
-      .reduce((acc, product) => acc + product.price * product.quantity, 0)
+      .reduce((acc, product) => acc + product.product.price, 0)
       .toFixed(2);
   };
 
@@ -71,25 +68,22 @@ function ShoppingCart() {
         Shopping Cart de {userProfile}
         <div className="total-price flex flex-col justify-center items-start">
           <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
-          <p className="text-3xl font-normal">{totalProduct()}$</p>{" "}
+          <p className="text-3xl font-normal">{totalProduct()}$</p>
         </div>
       </div>
       <div className="content-wrapper">
         <div className="product-grid grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7">
-          {shoppingCart.length > 0 ? (
+          {shoppingCart && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
-              <ShoppingCard
+              <ShoppingProductCard
                 key={index}
-                image={product.images}
-                name={product.name}
-                price={product.price}
-                quantity={product.quantity}
-                description={product.description}
-                deleteFromCart={() => removeProductFromCart(product._id)}
+                Products={product}
+                userId={currentUser}
+                removeProductFromCart={removeProductFromCart}
               />
             ))
           ) : (
-            <div className="empty-cart flex justify-center items-center h-full">
+            <div className="empty-cart flex flex-col justify-center items-center ">
               <p className="no-product-text text-6xl text-black text-center">
                 Aucun produit dans le panier
               </p>

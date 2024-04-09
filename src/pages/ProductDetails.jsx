@@ -30,6 +30,8 @@ function ProductDetails() {
   const currentUser = user._id;
   const iconStyles = { color: "black", fontSize: "1.3em" };
 
+  let [quantity, setQuantity] = useState(0);
+
   // Hook useEffect pour charger les détails du produit lorsque le composant est monté
   useEffect(() => {
     const fetchProduct = async () => {
@@ -38,6 +40,7 @@ function ProductDetails() {
           `http://localhost:3456/products/${productId}`
         );
         setProduct(response.data);
+        setQuantity(response.data.quantity);
         console.log(response.data);
         console.log(response.data.quantity);
       } catch (error) {
@@ -47,8 +50,6 @@ function ProductDetails() {
 
     fetchProduct();
   }, [productId]);
-
-  // let [quantity, setQuantity] = useState(product.quantity);
 
   // Fonction pour ajouter le produit au panier
   const addProductToCart = async () => {
@@ -71,8 +72,9 @@ function ProductDetails() {
     return <ErrorPage />;
   }
 
-  let addQuantity = () => {
-    setQuantity += 1;
+  let addQuantity = async () => {
+    await setQuantity(quantity + 1);
+    console.log(quantity);
   };
 
   return (
@@ -136,7 +138,7 @@ function ProductDetails() {
                   <FiMinus style={iconStyles} />
                 </button>
                 <div className="quantity-number flex items-center p-5 font-bold">
-                  {product.quantity}
+                  {quantity}
                 </div>
 
                 <button
