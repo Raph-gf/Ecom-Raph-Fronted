@@ -4,14 +4,10 @@ import ErrorPage from "./ErrorPage";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import DeletePopup from "../components/DeletePopupProductModal";
+import AdminEditProductModal from "../components/AdminEditProductModal";
 
 function ProductInfos() {
   const [product, setProduct] = useState(null);
-  const [showmodal, setShowmodal] = useState(null);
-  const [images, setImages] = useState();
-  const [name, setName] = useState();
-  const [price, setPrice] = useState();
-  const [description, setDescription] = useState();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -58,38 +54,6 @@ function ProductInfos() {
     }
   };
 
-  const updateProductInfos = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:3456/products/update-product/${productID}`,
-        {
-          image: images,
-          name: name,
-          price: price,
-          description: description,
-        }
-      );
-      setProduct(response.data);
-      console.log(response.data);
-      setImages("");
-      setName("");
-      setPrice("");
-      setDescription("");
-
-      enqueueSnackbar("Product successfully updated", {
-        variant: "success",
-        autoHideDuration: 2000,
-      });
-      navigate("/admin/all-products");
-    } catch (error) {
-      enqueueSnackbar("Failed to update Product", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-      console.error(error);
-    }
-  };
-
   return (
     <>
       <section class="pt-16 bg-blueGray-50 flex">
@@ -106,6 +70,9 @@ function ProductInfos() {
             <p class="mb-3 font-normal text-black">{product.description}</p>
             <button className="deleteProduct">
               <DeletePopup deleteProduct={deleteProduct} />
+            </button>
+            <button className="deleteProduct">
+              <AdminEditProductModal />
             </button>
           </div>
         </div>
