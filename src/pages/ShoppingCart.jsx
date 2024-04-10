@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { closeSnackbar, useSnackbar } from "notistack";
-import { MdDeleteForever } from "react-icons/md";
+import { useSnackbar } from "notistack";
 import ShoppingProductCard from "../components/ShoppingProductCard";
 
 function ShoppingCart() {
@@ -18,8 +17,8 @@ function ShoppingCart() {
         const response = await axios.get(
           `http://localhost:3456/products/${currentUser}/cart`
         );
-        console.log(response.data.products);
         setShoppingCart(response.data.products);
+        console.log(response.data.products);
       } catch (error) {
         console.error(error);
         enqueueSnackbar("Erreur lors de la récupération du panier", {
@@ -31,14 +30,17 @@ function ShoppingCart() {
     fetchUserCartProducts();
   }, [currentUser, enqueueSnackbar]);
 
-  // Fonction pour supprimer un produit du panier
   const removeProductFromCart = async (productId) => {
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `http://localhost:3456/products/${productId}/cart/${currentUser}`
       );
-      console.log(response.data);
-      setShoppingCart(response.data);
+
+      // Mise à jour du panier en filtrant le produit supprimé
+      setShoppingCart((prevCart) =>
+        prevCart.filter((product) => product._id !== productId)
+      );
+
       enqueueSnackbar("Produit supprimé avec succès du panier", {
         variant: "success",
         autoHideDuration: 2000,
@@ -56,7 +58,6 @@ function ShoppingCart() {
     if (!Array.isArray(shoppingCart) || shoppingCart.length === 0) {
       return 0;
     }
-    console.log(shoppingCart);
     return shoppingCart
       .reduce((acc, product) => acc + product.product.price, 0)
       .toFixed(2);
@@ -75,12 +76,12 @@ function ShoppingCart() {
         <div className="product-grid grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7">
           {shoppingCart && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
-              <ShoppingProductCard
-                key={index}
-                Products={product}
-                userId={currentUser}
-                removeProductFromCart={removeProductFromCart}
-              />
+              <div key={index} className="relative">
+                <ShoppingProductCard
+                  Products={product}
+                  removeProductFromCart={removeProductFromCart}
+                />
+              </div>
             ))
           ) : (
             <div className="empty-cart flex flex-col justify-center items-center ">

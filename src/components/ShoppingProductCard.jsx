@@ -1,9 +1,9 @@
 import React from "react";
 import { MdDeleteForever } from "react-icons/md";
 
-function ShoppingProductCard({ Products, userId, removeProductFromCart }) {
+function ShoppingProductCard({ Products, removeProductFromCart }) {
   const handleRemove = () => {
-    removeProductFromCart(Products.product._id);
+    removeProductFromCart(Products._id);
   };
 
   return (
@@ -29,7 +29,6 @@ function ShoppingProductCard({ Products, userId, removeProductFromCart }) {
             {Products.product.price}$
           </span>
           <button
-            href="#"
             className="delete-btn flex items-center gap-3 bg-orange-200 hover:scale-110 duration-200 font-medium rounded-lg text-sm px-2 py-2 mr-9"
             onClick={handleRemove}
           >
