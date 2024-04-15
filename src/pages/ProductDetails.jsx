@@ -11,28 +11,18 @@ import { FiMinus } from "react-icons/fi";
 import { Carousel } from "flowbite-react";
 
 function ProductDetails() {
-  // Utilisation du hook useSnackbar pour afficher des notifications
   const { enqueueSnackbar } = useSnackbar();
-
-  // État local pour stocker les informations du produit
   const [product, setProduct] = useState(null);
-
-  // État local pour stocker les produits dans le panier
   const [cart, setCart] = useState([]);
-
-  // Récupération de l'identifiant du produit depuis l'URL
   const { productId } = useParams();
   const navigate = useNavigate();
-
-  // Récupération de l'identifiant de l'utilisateur depuis le stockage local
   const userId = localStorage.getItem("user");
   const user = JSON.parse(userId);
-  const currentUser = user._id;
+  const currentUser = user.id;
+  console.log(currentUser);
   const iconStyles = { color: "black", fontSize: "1.3em" };
-
   let [quantity, setQuantity] = useState(0);
 
-  // Hook useEffect pour charger les détails du produit lorsque le composant est monté
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -84,7 +74,7 @@ function ProductDetails() {
           {/* Section de l'image du produit */}
           <div className="product-image md:w-1/2 md:mb-0">
             <div className="rounded-lg h-[700px] bg-gray-200">
-              <Carousel>
+              <Carousel pauseOnHover>
                 <img
                   className="w-full h-full object-fill rounded-lg"
                   src={product.images[0]}

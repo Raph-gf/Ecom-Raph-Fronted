@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import ShoppingProductCard from "../components/ShoppingProductCard";
+import { Link } from "react-router-dom";
+import { Button } from "flowbite-react";
 
 function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
   const userData = JSON.parse(localStorage.getItem("user"));
-  const userProfile = userData ? userData.firstname : "";
+  const userName = userData ? userData.name : "";
   const userId = localStorage.getItem("user");
-  const currentUser = userId ? JSON.parse(userId)._id : null;
+  const currentUser = userId ? JSON.parse(userId).id : null;
   const [shoppingCart, setShoppingCart] = useState([]);
+  const [pay, setPay] = useState(null);
 
   useEffect(() => {
     const fetchUserCartProducts = async () => {
@@ -54,6 +57,20 @@ function ShoppingCart() {
     }
   };
 
+  const payAndgetThefuckOut = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3456/payment/stripe/${currentUser}`
+      );
+      setPay(response.data.url);
+      console.log(response.data.url);
+      const paymentUrl = response.data.url;
+      window.open(paymentUrl, "blank");
+    } catch (error) {
+      console.error("Error fetching payment URL:", error);
+    }
+  };
+
   const totalProduct = () => {
     if (!Array.isArray(shoppingCart) || shoppingCart.length === 0) {
       return 0;
@@ -66,9 +83,20 @@ function ShoppingCart() {
   return (
     <section className="cart-wrapper">
       <div className="cart-header text-5xl font-bold pl-10 mt-16 mb-11 text-gray-900 dark:text-black">
-        Shopping Cart de {userProfile}
+        Shopping Cart de {userName}
         <div className="total-price flex flex-col justify-center items-start">
-          <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
+          <div className="price&pay flex items-center justify-center gap-3">
+            <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
+            <Button
+              onClick={() => {
+                payAndgetThefuckOut();
+              }}
+              gradientDuoTone="pinkToOrange"
+            >
+              Rhalass
+            </Button>
+          </div>
+
           <p className="text-3xl font-normal">{totalProduct()}$</p>
         </div>
       </div>
@@ -76,12 +104,10 @@ function ShoppingCart() {
         <div className="product-grid grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7">
           {shoppingCart && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
-              <div key={index} className="relative">
-                <ShoppingProductCard
-                  Products={product}
-                  removeProductFromCart={removeProductFromCart}
-                />
-              </div>
+              <ShoppingProductCard
+                Products={product}
+                removeProductFromCart={removeProductFromCart}
+              />
             ))
           ) : (
             <div className="empty-cart flex flex-col justify-center items-center ">

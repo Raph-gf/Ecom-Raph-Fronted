@@ -12,7 +12,7 @@ function NavBar() {
   const [token, setToken] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("user"));
-  const userProfile = userData ? userData.firstname : "";
+  const userProfile = userData ? userData.name : "";
 
   const Logout = () => {
     localStorage.removeItem("user");
@@ -22,7 +22,7 @@ function NavBar() {
 
   return (
     <>
-      {userData && userData.isAdmin === true ? (
+      {userData && userData.admin === true ? (
         <nav className="navbar bg-white border-gray-200 w-screen">
           <div className="navbar-content w-screen-xl flex flex-wrap items-center justify-between mx-auto px-10 pt-6 mb-6">
             <Link

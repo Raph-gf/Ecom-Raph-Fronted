@@ -10,7 +10,12 @@ function DeletePopup({ deleteUser, firstname }) {
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Delete</Button>
+      <button
+        className="bg-orange-200 rounded-3xl px-6 py-3 font-bold hover:bg-none "
+        onClick={() => setOpenModal(true)}
+      >
+        Delete
+      </button>
       <Modal
         show={openModal}
         size="md"

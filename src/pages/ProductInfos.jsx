@@ -6,6 +6,9 @@ import { useSnackbar } from "notistack";
 import DeletePopup from "../components/DeletePopupProductModal";
 import AdminEditProductModal from "../components/AdminEditProductModal";
 
+import { Carousel } from "flowbite-react";
+import { SiReactivex } from "react-icons/si";
+
 function ProductInfos() {
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
@@ -56,27 +59,70 @@ function ProductInfos() {
 
   return (
     <>
-      <section class="pt-16 bg-blueGray-50 flex">
-        <div class="max-w-sm rounded-lg shadow dark:bg-orange-200 dark:border-gray-700 ml-16">
-          <img class="rounded-t-lg" src={product.images} alt="" />
+      <div className="product-container ">
+        <div className="flex flex-row justify-between  gap-4 px-12 py-10 md:flex-no-wrap">
+          {/* Section de l'image du produit */}
+          <div className="product-image md:w-1/2 md:mb-0">
+            <div className="rounded-lg h-[700px] bg-gray-200">
+              <Carousel pauseOnHover>
+                <img
+                  className="w-full h-full object-fill rounded-lg"
+                  src={product.images[0]}
+                  alt="Product Image"
+                />
+                <img
+                  className="w-full h-full object-fill rounded-lg"
+                  src={product.images[1]}
+                  alt="Product Image"
+                />
+                <img
+                  className="w-full h-full object-fill rounded-lg"
+                  src={product.images[2]}
+                  alt="Product Image"
+                />
+              </Carousel>
+            </div>
+          </div>
 
-          <div class="p-5">
-            <a href="#">
-              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {product.name}
-              </h5>
-            </a>
-            <p class="mb-3 font-normal text-black">{product.price} $</p>
-            <p class="mb-3 font-normal text-black">{product.description}</p>
-            <button className="deleteProduct">
-              <DeletePopup deleteProduct={deleteProduct} />
-            </button>
-            <button className="deleteProduct">
-              <AdminEditProductModal />
-            </button>
+          {/* Section des détails du produit */}
+          <div className="product-details md:w-1/2 px-4">
+            <div className="website-name flex items-center gap-3 text-orange-300 pt-9 pb-6">
+              ECOM
+              <div className="icon">
+                <SiReactivex />
+              </div>
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">
+                RAPH
+              </span>
+            </div>
+            <h2 className="product-name text-6xl font-bold w-full text-black mb-10">
+              {product.name}
+            </h2>
+            <div>
+              <p className="font-bold text-black">Description:</p>
+              <p className="product-description text-black text-sm mt-2 mb-8">
+                {product.description}
+              </p>
+            </div>
+            <div className="product-price flex pb-8 mb-4">
+              <div className="text-black">
+                <span className="price-value text-5xl  font-bold text-black">
+                  ${product.price}
+                </span>
+              </div>
+            </div>
+            {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
+            <div className="btn-wrapper flex gap-3">
+              <button className="btn-deleteProduct bg-orange-200 ">
+                <DeletePopup deleteProduct={deleteProduct} />
+              </button>
+              <button className="btn-editProduct bg-orange-200">
+                <AdminEditProductModal />
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </>
   );
 }

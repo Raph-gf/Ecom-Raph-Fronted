@@ -9,7 +9,7 @@ export default {
         "2xl": "1440px",
         xl: "1237px",
         lg: "1024px",
-        md: "617px",
+        md: "600px",
         sm: "320px",
       },
     },

@@ -1,5 +1,6 @@
 import React from "react";
 import { MdDeleteForever } from "react-icons/md";
+import { Link } from "react-router-dom"; // Import de Link depuis React Router
 
 function ShoppingProductCard({ Products, removeProductFromCart }) {
   const handleRemove = () => {
@@ -14,11 +15,12 @@ function ShoppingProductCard({ Products, removeProductFromCart }) {
         alt="Product Image"
       />
       <div className="product-details px-3 pb-5">
-        <a href="#">
+        {/* Utilisation de Link pour rendre le nom du produit cliquable */}
+        <Link to={`/products/${Products.product._id}`}>
           <h5 className="product-name text-2xl font-bold text-gray-900 dark:text-black mb-7">
             {Products.product.name}
           </h5>
-        </a>
+        </Link>
         <div className="product-quantity flex items-center">
           <h5 className="quantity-label text-md font-bold text-gray-900 dark:text-black">
             Qty: {Products.product.quantity}

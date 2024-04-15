@@ -27,7 +27,6 @@ function Login() {
       const { token } = response.data;
       const decodedUser = jwtDecode(token);
       localStorage.setItem("user", JSON.stringify(decodedUser));
-      localStorage.setItem("user", JSON.stringify(response.data.user));
       localStorage.setItem("token", JSON.stringify(response.data.token));
       setToken(response.data.token);
       enqueueSnackbar("User successfully connected", {
