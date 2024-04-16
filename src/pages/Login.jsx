@@ -29,12 +29,16 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(decodedUser));
       localStorage.setItem("token", JSON.stringify(response.data.token));
       setToken(response.data.token);
-      enqueueSnackbar("User successfully connected", {
+      enqueueSnackbar("Connexion succesfully completed", {
         variant: "success",
         autoHideDuration: 2000,
       });
       navigate("/");
     } catch (error) {
+      enqueueSnackbar("Connexion failed please verify your email or password", {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
       console.error(error);
     }
   };

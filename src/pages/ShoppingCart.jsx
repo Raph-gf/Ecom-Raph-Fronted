@@ -85,7 +85,7 @@ function ShoppingCart() {
       <div className="cart-header text-5xl font-bold pl-10 mt-16 mb-11 text-gray-900 dark:text-black">
         Shopping Cart de {userName}
         <div className="total-price flex flex-col justify-center items-start">
-          <div className="price&pay flex items-center justify-center gap-3">
+          <div className="price&pay flex flex-row items-center justify-center gap-3">
             <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
             <Button
               onClick={() => {

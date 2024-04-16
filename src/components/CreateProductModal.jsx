@@ -1,4 +1,11 @@
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import {
+  Button,
+  Label,
+  Modal,
+  TextInput,
+  FileInput,
+  Textarea,
+} from "flowbite-react";
 import { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -9,33 +16,49 @@ function CreateUserModal() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const createProduct = async () => {
+  const handleFileChange = (e) => {
+    setImages(e.target.files);
+  };
+
+  const createProduct = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    if (images && images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append("images", images[i]);
+      }
+    }
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("description", description);
+
     try {
       const response = await axios.post(
         `http://localhost:3456/products/create-product`,
+        formData,
         {
-          name: name,
-          price: price,
-          image: image,
-          description: description,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
+
       console.log(response.data);
       setName("");
       setPrice("");
       setDescription("");
-      setImage("");
+      setImages([]);
       enqueueSnackbar("Product successfully created", {
         variant: "success",
         autoHideDuration: 2000,
       });
       setOpenModal(false);
     } catch (error) {
-      enqueueSnackbar("Failed to create User", {
+      enqueueSnackbar("Failed to create Product", {
         variant: "error",
         autoHideDuration: 2000,
       });
@@ -48,7 +71,7 @@ function CreateUserModal() {
       <div className="btn flex gap-1 hover:text-orange-400 ">
         <GoPlus fontSize="1.2rem" />
         <button className="bg-none text-xs" onClick={() => setOpenModal(true)}>
-          Create user
+          Create Product
         </button>
       </div>
       <Modal
@@ -61,10 +84,9 @@ function CreateUserModal() {
         <Modal.Body>
           <form
             action="#"
-            onSubmit={(e) => {
-              e.preventDefault();
-              createProduct();
-            }}
+            id="createForm"
+            encType="multipart/form-data"
+            onSubmit={createProduct}
             className="mx-auto mb-0 mt-8 max-w-md space-y-4"
           >
             <div className="space-y-6">
@@ -89,25 +111,25 @@ function CreateUserModal() {
                   onChange={(event) => setPrice(event.target.value)}
                 />
               </div>
-              <div>
-                <Label htmlFor="Description" value="Description" />
-                <TextInput
-                  id="Description"
+
+              <div className="max-w-md">
+                <div className="mb-2 block">
+                  <Label htmlFor="comment" value="Product description" />
+                </div>
+                <Textarea
+                  id="description"
                   placeholder="Enter description"
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
+                  required
+                  rows={4}
                 />
               </div>
-              <div>
-                <Label htmlFor="image" value="image" />
-                <TextInput
-                  type="text"
-                  id="image"
-                  placeholder="Link to image"
-                  value={image}
-                  onChange={(event) => setImage(event.target.value)}
-                  required
-                />
+              <div id="fileUpload" className="max-w-md">
+                <div className="mb-2 block">
+                  <Label htmlFor="file" />
+                </div>
+                <FileInput id="file" onChange={handleFileChange} multiple />
               </div>
 
               <div className="w-full">

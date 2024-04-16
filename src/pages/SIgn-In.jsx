@@ -36,11 +36,6 @@ function SignIn() {
       );
       console.log(response.data);
       localStorage.setItem("token", JSON.stringify(response.data.createToken));
-      // localStorage.setItem("newuser", JSON.stringify(response.data.newuser));
-      // localStorage.setItem(
-      //   "newuserId",
-      //   JSON.stringify(response.data.newuserId)
-      // );
       setToken(response.data.token);
       enqueueSnackbar("Sign-in succefully completed", {
         variant: "success",
@@ -48,8 +43,24 @@ function SignIn() {
       });
       navigate("/login");
     } catch (error) {
-      console.error(error);
-      console.log("Email deja existant");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.message === "Email already exists"
+      ) {
+        enqueueSnackbar(
+          "L'adresse e-mail existe déjà. Veuillez en choisir une autre.",
+          {
+            variant: "error",
+            autoHideDuration: 3000,
+          }
+        );
+      } else {
+        console.log(
+          "Une erreur s'est produite lors de l'inscription :",
+          error.response.data.error
+        );
+      }
     }
   };
 

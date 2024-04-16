@@ -67,7 +67,7 @@ function ProductInfos() {
               <Carousel pauseOnHover>
                 <img
                   className="w-full h-full object-fill rounded-lg"
-                  src={product.images[0]}
+                  src={`http://localhost:3456/${product.images[0]}`}
                   alt="Product Image"
                 />
                 <img
