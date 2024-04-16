@@ -72,12 +72,12 @@ function ProductInfos() {
                 />
                 <img
                   className="w-full h-full object-fill rounded-lg"
-                  src={product.images[1]}
+                  src={`http://localhost:3456/${product.images[1]}`}
                   alt="Product Image"
                 />
                 <img
                   className="w-full h-full object-fill rounded-lg"
-                  src={product.images[2]}
+                  src={`http://localhost:3456/${product.images[2]}`}
                   alt="Product Image"
                 />
               </Carousel>
@@ -111,12 +111,15 @@ function ProductInfos() {
                 </span>
               </div>
             </div>
-            {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
+
             <div className="btn-wrapper flex gap-3">
-              <button className="btn-deleteProduct bg-orange-200 ">
-                <DeletePopup deleteProduct={deleteProduct} />
+              <button className="btn-deleteProduct ">
+                <DeletePopup
+                  className="rounded-xl bg-red-500 hover:bg-red-600"
+                  deleteProduct={deleteProduct}
+                />
               </button>
-              <button className="btn-editProduct bg-orange-200">
+              <button className="btn-editProduct rounded-xl bg-orange-200">
                 <AdminEditProductModal />
               </button>
             </div>

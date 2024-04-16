@@ -76,18 +76,18 @@ function ProductDetails() {
             <div className="rounded-lg h-[700px] bg-gray-200">
               <Carousel pauseOnHover>
                 <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={product.images[0]}
+                  className="w-full h-full object-contain rounded-lg"
+                  src={`http://localhost:3456/${product.images[0]}`}
                   alt="Product Image"
                 />
                 <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={product.images[1]}
+                  className="w-full h-full object-contain rounded-lg"
+                  src={`http://localhost:3456/${product.images[1]}`}
                   alt="Product Image"
                 />
                 <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={product.images[2]}
+                  className="w-full h-full object-contain rounded-lg"
+                  src={`http://localhost:3456/${product.images[2]}`}
                   alt="Product Image"
                 />
               </Carousel>
