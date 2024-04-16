@@ -13,6 +13,10 @@ function NavBar() {
 
   const userData = JSON.parse(localStorage.getItem("user"));
   const userProfile = userData ? userData.name : "";
+  const userId = localStorage.getItem("user");
+  const currentUser = userId ? JSON.parse(userId).id : null;
+  console.log(currentUser);
+  console.log(userData.cart);
 
   const Logout = () => {
     localStorage.removeItem("user");
@@ -166,7 +170,7 @@ function NavBar() {
                   <>
                     <li>
                       <Link
-                        to="cart"
+                        to={`/${currentUser}/cart`}
                         className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-400 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                       >
                         <IoCart style={iconStyles} />

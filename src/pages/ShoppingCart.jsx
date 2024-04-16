@@ -11,6 +11,7 @@ function ShoppingCart() {
   const userName = userData ? userData.name : "";
   const userId = localStorage.getItem("user");
   const currentUser = userId ? JSON.parse(userId).id : null;
+  console.log(currentUser);
   const [shoppingCart, setShoppingCart] = useState([]);
   const [pay, setPay] = useState(null);
 
@@ -57,7 +58,7 @@ function ShoppingCart() {
     }
   };
 
-  const payAndgetThefuckOut = async () => {
+  const handlePayment = async () => {
     try {
       const response = await axios.post(
         `http://localhost:3456/payment/stripe/${currentUser}`
@@ -89,7 +90,7 @@ function ShoppingCart() {
             <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
             <Button
               onClick={() => {
-                payAndgetThefuckOut();
+                handlePayment();
               }}
               gradientDuoTone="pinkToOrange"
             >
