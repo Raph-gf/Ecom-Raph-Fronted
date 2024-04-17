@@ -2,6 +2,8 @@ import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 function Card(product) {
+  console.log(product.image);
+
   return (
     <>
       <div className="w-full max-w-sm rounded-lg shadow-2xl hover:translate-y-2 duration-150 ease-in">
@@ -36,13 +38,10 @@ function Card(product) {
             <span className="text-3xl font-bold text-gray-900 dark:text-black pl-3">
               {product.price}$
             </span>
-            <a
-              href="#"
-              className="text-black flex items-center gap-2 font-montserrat text-lg bg-orange-200 hover:scale-110 duration-200  rounded-lg  px-2 py-2 text-center"
-            >
+            <button className="text-black flex items-center gap-2 font-montserrat text-lg bg-orange-200 hover:scale-110 duration-200  rounded-lg  px-2 py-2 text-center">
               Details
               <FaLongArrowAltRight />
-            </a>
+            </button>
           </div>
         </div>
       </div>

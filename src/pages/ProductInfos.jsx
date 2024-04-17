@@ -1,70 +1,60 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
-import { IoCartOutline } from "react-icons/io5";
+import axios from "axios";
 import { useSnackbar } from "notistack";
-import { SiReactivex } from "react-icons/si";
-import { FaPlus } from "react-icons/fa6";
-import { FiMinus } from "react-icons/fi";
+import DeletePopup from "../components/DeletePopupProductModal";
+import AdminEditProductModal from "../components/AdminEditProductModal";
 
 import { Carousel } from "flowbite-react";
+import { SiReactivex } from "react-icons/si";
 
-function ProductDetails() {
-  const { enqueueSnackbar } = useSnackbar();
+function ProductInfos() {
   const [product, setProduct] = useState(null);
-  const [cart, setCart] = useState([]);
-  const { productId } = useParams();
   const navigate = useNavigate();
-  const userId = localStorage.getItem("user");
-  const user = JSON.parse(userId);
-  const currentUser = user.id;
-  console.log(currentUser);
-  const iconStyles = { color: "black", fontSize: "1.3em" };
-  let [quantity, setQuantity] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { productID } = useParams();
+  console.log(productID);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const infos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3456/products/${productId}`
+          `http://localhost:3456/products/${productID}`
         );
         setProduct(response.data);
-        setQuantity(response.data.quantity);
         console.log(response.data);
-        console.log(response.data.quantity);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchProduct();
-  }, [productId]);
-
-  // Fonction pour ajouter le produit au panier
-  const addProductToCart = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:3456/products/${productId}/addToCart/${currentUser}`
-      );
-      setCart(response.data);
-      enqueueSnackbar("Product successfully added to cart", {
-        variant: "success",
-        autoHideDuration: 2000,
-      });
-      navigate("/all-products");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+    infos();
+  }, [productID]);
   if (!product) {
     return <ErrorPage />;
   }
 
-  let addQuantity = async () => {
-    await setQuantity(quantity + 1);
-    console.log(quantity);
+  const deleteProduct = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3456/products/delete-product/${productID}`
+      );
+      setProduct(response.data);
+      console.log(response.data);
+      enqueueSnackbar("Product successfully deleted", {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
+      navigate("/admin/all-products");
+    } catch (error) {
+      enqueueSnackbar("Failed to delete Product", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+      console.error(error);
+    }
   };
 
   return (
@@ -121,29 +111,16 @@ function ProductDetails() {
                 </span>
               </div>
             </div>
-            {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
-            <div className="flex gap-7 w-full">
-              <div className="quantity flex rounded-md bg-orange-300">
-                <button className="remove-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md">
-                  <FiMinus style={iconStyles} />
-                </button>
-                <div className="quantity-number flex items-center p-5 font-bold">
-                  {quantity}
-                </div>
 
-                <button
-                  onClick={addQuantity}
-                  className="add-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md "
-                >
-                  <FaPlus style={iconStyles} />
-                </button>
-              </div>
-
-              <button
-                onClick={addProductToCart}
-                className="add-to-cart-btn flex items-center justify-center w-full p-4 gap-4 rounded-md bg-black text-white font-bold shadow-2xl hover:bg-orange-200 hover:text-black "
-              >
-                Add to Cart <IoCartOutline />
+            <div className="btn-wrapper flex gap-3">
+              <button className="btn-deleteProduct ">
+                <DeletePopup
+                  className="rounded-xl bg-red-500 hover:bg-red-600"
+                  deleteProduct={deleteProduct}
+                />
+              </button>
+              <button className="btn-editProduct rounded-xl bg-orange-200">
+                <AdminEditProductModal />
               </button>
             </div>
           </div>
@@ -153,4 +130,4 @@ function ProductDetails() {
   );
 }
 
-export default ProductDetails;
+export default ProductInfos;
