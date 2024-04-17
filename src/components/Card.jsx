@@ -2,7 +2,7 @@ import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 function Card(product) {
-  console.log(product);
+  console.log(product.image);
 
   return (
     <>

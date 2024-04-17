@@ -1,16 +1,23 @@
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import {
+  Button,
+  FileInput,
+  Label,
+  Modal,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import axios from "axios";
 
 function AdminEditProductModal() {
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState();
   const [openModal, setOpenModal] = useState(false);
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
   const [images, setImages] = useState();
-  const [description, setDescription] = useState();
-  const [price, setPrice] = useState();
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -18,29 +25,61 @@ function AdminEditProductModal() {
   const { productID } = useParams();
   console.log(productID);
 
+  const handleFileChange = (e) => {
+    setImages(e.target.files);
+  };
+
+  useEffect(() => {
+    const productData = async () => {
+      const response = await axios.get(
+        `http://localhost:3456/products/${productID}`
+      );
+      const fetchedProduct = response.data;
+
+      setProduct(fetchedProduct);
+      console.log(fetchedProduct);
+      setName(fetchedProduct.name);
+      setPrice(fetchedProduct.price);
+      setDescription(fetchedProduct.description);
+      setImages(fetchedProduct.images);
+    };
+    productData();
+  }, []);
+
   const updateProductInfos = async () => {
     try {
-      const response = await axios.put(
+      const formData = new FormData();
+      if (images && images.length > 0) {
+        for (let i = 0; i < images.length; i++) {
+          formData.append("images", images[i]);
+        }
+      }
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("description", description);
+
+      // Mettre à jour le produit avec les nouvelles informations
+      const updateResponse = await axios.put(
         `http://localhost:3456/products/update-product/${productID}`,
+        formData,
         {
-          image: images,
-          name: name,
-          price: price,
-          description: description,
+          headers: {
+            "Content-Type": "multipart/form-data", // Assurez-vous d'ajouter ce header pour FormData
+          },
         }
       );
-      setProduct(response.data);
-      console.log(response.data);
-      setImages("");
-      setName("");
-      setPrice("");
-      setDescription("");
 
+      // Mettre à jour l'état du produit après la mise à jour
+      setProduct(updateResponse.data);
+      setPrice(updateResponse.data.price);
+      setName(updateResponse.data.name);
+      setDescription(updateResponse.data.description);
+      setImages(updateResponse.data.images);
       enqueueSnackbar("Product successfully updated", {
         variant: "success",
         autoHideDuration: 2000,
       });
-      navigate("/admin/all-products");
+      setOpenModal(false);
     } catch (error) {
       enqueueSnackbar("Failed to update Product", {
         variant: "error",
@@ -60,7 +99,7 @@ function AdminEditProductModal() {
       </button>
       <Modal
         show={openModal}
-        size="sm"
+        size="lg"
         onClose={() => setOpenModal(false)}
         popup
       >
@@ -104,22 +143,23 @@ function AdminEditProductModal() {
                 <div className="mb-2 block">
                   <Label htmlFor="images" value="images" />
                 </div>
-                <TextInput
-                  id="images"
-                  placeholder="enter link to images"
-                  value={images}
-                  onChange={(event) => setImages(event.target.value)}
-                />
-              </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="description" value="description" />
+                <div id="fileUpload" className="max-w-md">
+                  <div className="mb-2 block">
+                    <Label htmlFor="file" />
+                  </div>
+                  <FileInput id="file" onChange={handleFileChange} multiple />
                 </div>
-                <TextInput
+              </div>
+              <div className="max-w-md">
+                <div className="mb-2 block">
+                  <Label htmlFor="comment" value="Product description" />
+                </div>
+                <Textarea
                   id="description"
-                  placeholder="enter description"
+                  placeholder="Enter description"
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
+                  rows={4}
                 />
               </div>
 
