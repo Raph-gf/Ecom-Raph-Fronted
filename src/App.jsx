@@ -12,6 +12,7 @@ import CreateUser from "./pages/CreateUser";
 import AdminProduct from "./pages/AdminProduct";
 import ProductInfos from "./pages/ProductInfos";
 import CreateProduct from "./pages/CreateProduct";
+import PayementPage from "./pages/PayementPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/admin/all-products" element={<AdminProduct />} />
           <Route path="/admin/:productID" element={<ProductInfos />} />
           <Route path="/admin/create-product" element={<CreateProduct />} />
+          <Route path="/stripe/payment/success" element={<PayementPage />} />
         </Routes>
       </Router>
     </>

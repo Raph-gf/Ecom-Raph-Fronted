@@ -16,7 +16,7 @@ function NavBar() {
   const userId = localStorage.getItem("user");
   const currentUser = userId ? JSON.parse(userId).id : null;
   console.log(currentUser);
-  console.log(userData.cart);
+  // console.log(userData.cart);
 
   const Logout = () => {
     localStorage.removeItem("user");

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import ShoppingProductCard from "../components/ShoppingProductCard";
-import { Link } from "react-router-dom";
-import { Button } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
+import { ImCart } from "react-icons/im";
 
 function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
@@ -14,6 +14,7 @@ function ShoppingCart() {
   console.log(currentUser);
   const [shoppingCart, setShoppingCart] = useState([]);
   const [pay, setPay] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserCartProducts = async () => {
@@ -25,10 +26,6 @@ function ShoppingCart() {
         console.log(response.data.products);
       } catch (error) {
         console.error(error);
-        enqueueSnackbar("Erreur lors de la récupération du panier", {
-          variant: "error",
-          autoHideDuration: 2000,
-        });
       }
     };
     fetchUserCartProducts();
@@ -66,8 +63,16 @@ function ShoppingCart() {
       setPay(response.data.url);
       console.log(response.data.url);
       const paymentUrl = response.data.url;
-      window.open(paymentUrl, "blank");
+      window.open(paymentUrl, "_blank");
+      enqueueSnackbar("Achat effectuer avec succès", {
+        variant: "success",
+        autoHideDuration: 4000,
+      });
     } catch (error) {
+      enqueueSnackbar("Erreur lors du paiement", {
+        variant: "error",
+        autoHideDuration: 4000,
+      });
       console.error("Error fetching payment URL:", error);
     }
   };
@@ -88,17 +93,18 @@ function ShoppingCart() {
         <div className="total-price flex flex-col justify-center items-start">
           <div className="price&pay flex flex-row items-center justify-center gap-3">
             <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
-            <Button
-              onClick={() => {
-                handlePayment();
-              }}
-              gradientDuoTone="pinkToOrange"
-            >
-              Rhalass
-            </Button>
           </div>
 
-          <p className="text-3xl font-normal">{totalProduct()}$</p>
+          <p className="text-3xl font-normal mt-2">{totalProduct()}$</p>
+          <button
+            className="buy-btn flex flex-row text-lg items-center gap-2 bg-orange-200 p-3 rounded-xl mt-5 "
+            onClick={() => {
+              handlePayment();
+            }}
+          >
+            <p>Buy</p>
+            <ImCart />
+          </button>
         </div>
       </div>
       <div className="content-wrapper">
