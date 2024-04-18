@@ -26,7 +26,7 @@ function NavBar() {
 
   return (
     <>
-      {userData && userData.admin === true ? (
+      {userData && userData.role === "admin" ? (
         <nav className="navbar bg-white border-gray-200 w-screen">
           <div className="navbar-content w-screen-xl flex flex-wrap items-center justify-between mx-auto px-10 pt-6 mb-6">
             <Link

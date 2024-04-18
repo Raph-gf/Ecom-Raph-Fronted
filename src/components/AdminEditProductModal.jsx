@@ -90,6 +90,7 @@ function AdminEditProductModal() {
         autoHideDuration: 2000,
       });
       setOpenModal(false);
+      window.location.reload();
     } catch (error) {
       enqueueSnackbar("Failed to update Product", {
         variant: "error",
