@@ -18,10 +18,11 @@ function UserInfos() {
   const [password, setPassword] = useState();
   const [zipCode, setZipCode] = useState();
   const [Adress, setAdress] = useState();
-
   const [userinfos, setUserinfos] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+
   const navigate = useNavigate();
+  const token = JSON.parse(localStorage.getItem("token"));
+  console.log(token);
 
   const { userID } = useParams();
   console.log(userID);
@@ -30,7 +31,12 @@ function UserInfos() {
     const infos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3456/users/${userID}`
+          `http://localhost:3456/admin/user/${userID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setUserinfos(response.data);
         console.log(response.data);
@@ -38,7 +44,6 @@ function UserInfos() {
         console.error(error);
       }
     };
-
     infos();
   }, [userID]);
 
@@ -49,6 +54,11 @@ function UserInfos() {
     try {
       const response = await axios.put(
         `http://localhost:3456/users/${userID}/update`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
         {
           firstname: firstname,
           lastname: lastname,
@@ -83,7 +93,12 @@ function UserInfos() {
   const deleteUser = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3456/users/${userID}/delete`
+        `http://localhost:3456/users/${userID}/delete`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setUserinfos(response.data);
       enqueueSnackbar("User successfully deleted", {

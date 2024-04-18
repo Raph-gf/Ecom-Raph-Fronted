@@ -1,5 +1,5 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
@@ -15,18 +15,48 @@ function AdminEditUserModal() {
   const { userID } = useParams();
   console.log(userID);
 
+  const token = JSON.parse(localStorage.getItem("token"));
+  console.log(token);
+
+  useEffect(() => {
+    const userData = async () => {
+      const response = await axios.get(
+        `http://localhost:3456/admin/user/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const fetchedUser = response.data;
+      console.log(fetchedUser);
+      setFirstname(fetchedUser.firstname);
+      setLastname(fetchedUser.lastname);
+      setEmail(fetchedUser.email);
+      setZipCode(fetchedUser.zipCode);
+      setAddress(fetchedUser.Adress);
+    };
+    userData();
+  }, []);
+
   const updateUserInfos = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:3456/users/${userID}/update`,
+        `http://localhost:3456/admin/user/${userID}/update`,
         {
           firstname: firstname,
           lastname: lastname,
           email: email,
           zipCode: zipCode,
           Adress: Adress,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+
       console.log(response.data);
       setFirstname("");
       setLastname("");
@@ -38,6 +68,7 @@ function AdminEditUserModal() {
         variant: "success",
         autoHideDuration: 2500,
       });
+      window.location.reload();
     } catch (error) {
       enqueueSnackbar("Failed to update User", {
         variant: "error",
@@ -52,7 +83,7 @@ function AdminEditUserModal() {
       <Button onClick={() => setOpenModal(true)}>Edit</Button>
       <Modal
         show={openModal}
-        size="sm"
+        size="lg"
         onClose={() => setOpenModal(false)}
         popup
       >

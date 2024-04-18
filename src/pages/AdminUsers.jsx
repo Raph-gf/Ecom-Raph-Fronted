@@ -6,12 +6,19 @@ import CreateUserModal from "../components/CreateUserModal";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
+  const token = JSON.parse(localStorage.getItem("token"));
+  console.log(token);
 
   useEffect(() => {
     const getAllUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3456/users/allusers"
+          "http://localhost:3456/users/allusers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setUsers(response.data);
         console.log(response.data);
@@ -28,16 +35,17 @@ function AdminUsers() {
         <h1>Users</h1>
         <CreateUserModal />
       </div>
-      {users.map((user, index) => (
-        <Link to={`/users/${user._id}`} key={index}>
-          <Table
-            key={index}
-            firstname={user.firstname}
-            lastname={user.lastname}
-            email={user.email}
-          />
-        </Link>
-      ))}
+      {Array.isArray(users) &&
+        users.map((user, index) => (
+          <Link to={`/users/${user._id}`} key={index}>
+            <Table
+              key={index}
+              firstname={user.firstname}
+              lastname={user.lastname}
+              email={user.email}
+            />
+          </Link>
+        ))}
     </>
   );
 }
