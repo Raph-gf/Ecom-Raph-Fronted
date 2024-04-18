@@ -16,11 +16,8 @@ function ProductDetails() {
   const [cart, setCart] = useState([]);
   const { productId } = useParams();
   const navigate = useNavigate();
-  const userId = localStorage.getItem("user");
-  const user = JSON.parse(userId);
-  const currentUser = user.id;
-  console.log(currentUser);
-  const iconStyles = { color: "black", fontSize: "1.3em" };
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const currentUser = userData ? userData.id : null;
   let [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
@@ -41,11 +38,15 @@ function ProductDetails() {
     fetchProduct();
   }, [productId]);
 
-  // Fonction pour ajouter le produit au panier
   const addProductToCart = async () => {
     try {
+      const data = {
+        quantity: quantity,
+        price: product.price * quantity,
+      };
       const response = await axios.post(
-        `http://localhost:3456/products/${productId}/addToCart/${currentUser}`
+        `http://localhost:3456/products/${productId}/addToCart/${currentUser}`,
+        data
       );
       setCart(response.data);
       enqueueSnackbar("Product successfully added to cart", {
@@ -54,6 +55,13 @@ function ProductDetails() {
       });
       navigate("/all-products");
     } catch (error) {
+      enqueueSnackbar(
+        "Can't add product to cart, you need to sign-in or login",
+        {
+          variant: "error",
+          autoHideDuration: 4000,
+        }
+      );
       console.error(error);
     }
   };
@@ -61,11 +69,6 @@ function ProductDetails() {
   if (!product) {
     return <ErrorPage />;
   }
-
-  let addQuantity = async () => {
-    await setQuantity(quantity + 1);
-    console.log(quantity);
-  };
 
   return (
     <>
@@ -117,28 +120,12 @@ function ProductDetails() {
             <div className="product-price flex pb-8 mb-4">
               <div className="text-black">
                 <span className="price-value text-5xl  font-bold text-black">
-                  ${product.price}
+                  ${product.price * quantity}
                 </span>
               </div>
             </div>
             {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
             <div className="flex gap-7 w-full">
-              <div className="quantity flex rounded-md bg-orange-300">
-                <button className="remove-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md">
-                  <FiMinus style={iconStyles} />
-                </button>
-                <div className="quantity-number flex items-center p-5 font-bold">
-                  {quantity}
-                </div>
-
-                <button
-                  onClick={addQuantity}
-                  className="add-quantity-btn flex items-center justify-center p-5 gap-4  text-white font-bold hover:bg-orange-200 hover:text-black hover:rounded-md "
-                >
-                  <FaPlus style={iconStyles} />
-                </button>
-              </div>
-
               <button
                 onClick={addProductToCart}
                 className="add-to-cart-btn flex items-center justify-center w-full p-4 gap-4 rounded-md bg-black text-white font-bold shadow-2xl hover:bg-orange-200 hover:text-black "

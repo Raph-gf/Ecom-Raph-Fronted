@@ -11,6 +11,9 @@ import {
 } from "flowbite-react";
 import axios from "axios";
 
+const token = JSON.parse(localStorage.getItem("token"));
+console.log(token);
+
 function AdminEditProductModal() {
   const [product, setProduct] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -32,7 +35,12 @@ function AdminEditProductModal() {
   useEffect(() => {
     const productData = async () => {
       const response = await axios.get(
-        `http://localhost:3456/products/${productID}`
+        `http://localhost:3456/admin/products/${productID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const fetchedProduct = response.data;
 
@@ -60,14 +68,16 @@ function AdminEditProductModal() {
 
       // Mettre à jour le produit avec les nouvelles informations
       const updateResponse = await axios.put(
-        `http://localhost:3456/products/update-product/${productID}`,
+        `http://localhost:3456/admin/products/update-product/${productID}`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Assurez-vous d'ajouter ce header pour FormData
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Assurez-vous d'ajouter ce header pour FormData
           },
         }
       );
+      console.log(token);
 
       // Mettre à jour l'état du produit après la mise à jour
       setProduct(updateResponse.data);

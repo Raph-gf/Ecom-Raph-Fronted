@@ -9,10 +9,10 @@ function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
   const userData = JSON.parse(localStorage.getItem("user"));
   const userName = userData ? userData.name : "";
-  const userId = localStorage.getItem("user");
-  const currentUser = userId ? JSON.parse(userId).id : null;
-  console.log(currentUser);
+  const currentUser = userData ? userData.id : null;
+
   const [shoppingCart, setShoppingCart] = useState([]);
+  const [quantity, setQuantity] = useState(1);
   const [pay, setPay] = useState(null);
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ function ShoppingCart() {
           `http://localhost:3456/products/${currentUser}/cart`
         );
         setShoppingCart(response.data.products);
-        console.log(response.data.products);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -52,6 +52,21 @@ function ShoppingCart() {
         variant: "error",
         autoHideDuration: 2000,
       });
+    }
+  };
+
+  const handleAddQty = async (productId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3456/products/${currentUser}/updateProductQuantity/add`,
+        {
+          productId: "660fc404be865742a050a1ff",
+        }
+      );
+      setQuantity(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error adding product quantity:", error);
     }
   };
 
@@ -114,6 +129,7 @@ function ShoppingCart() {
               <ShoppingProductCard
                 Products={product}
                 removeProductFromCart={removeProductFromCart}
+                handleAddQty={handleAddQty}
               />
             ))
           ) : (

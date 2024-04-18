@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function AdminProduct() {
   const [products, setProducts] = useState();
   useEffect(() => {
-    const getAllUsers = async () => {
+    const getAllProduct = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3456/products/all-products"
@@ -18,7 +18,7 @@ function AdminProduct() {
         console.error("Error fetching Users", error);
       }
     };
-    getAllUsers();
+    getAllProduct();
   }, []);
 
   return (
