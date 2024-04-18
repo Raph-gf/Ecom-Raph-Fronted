@@ -10,7 +10,7 @@ import { Carousel } from "flowbite-react";
 import { SiReactivex } from "react-icons/si";
 
 function ProductInfos() {
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState("");
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 

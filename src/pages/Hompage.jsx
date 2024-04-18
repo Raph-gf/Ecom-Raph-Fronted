@@ -85,7 +85,7 @@ function Homepage() {
             <Link to={`/products/${product._id}`} key={index}>
               <Card
                 key={index}
-                image={product.images}
+                images={product.images}
                 name={product.name}
                 price={product.price}
                 description={product.description}
