@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+
 import Homepage from "./pages/Hompage";
 import Login from "./pages/Login";
 import SignIn from "./pages/SIgn-In";
+import NavBar from "./components/navBar";
 import Allproducts from "./pages/Allproducts";
 import ProductDetails from "./pages/ProductDetails";
 import ShoppingCart from "./pages/ShoppingCart";
@@ -18,7 +19,7 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar />
+        <NavBar />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />
