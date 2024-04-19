@@ -3,17 +3,17 @@ import Table from "../components/Table";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CreateUserModal from "../components/CreateUserModal";
+import { userInfos } from "../context";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
-  const token = JSON.parse(localStorage.getItem("token"));
-  console.log(token);
+  const { token } = userInfos();
 
   useEffect(() => {
     const getAllUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3456/users/allusers",
+          "http://localhost:3456/admin/user/allusers",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ function AdminUsers() {
       }
     };
     getAllUsers();
-  }, []);
+  }, [token]);
 
   return (
     <>

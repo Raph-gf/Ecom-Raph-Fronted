@@ -1,34 +1,24 @@
 import React, { useEffect, useState } from "react";
-import ErrorPage from "./ErrorPage";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import ErrorPage from "./ErrorPage";
 import { useSnackbar } from "notistack";
-import { Card, Dropdown, Button } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { Avatar } from "flowbite-react";
-import AdminEditUserModal from "../components/AdminUserModal";
-import DeletePopup from "../components/DeletePopupModal";
+import AdminEditUserModal from "../components/AdminEditUserModal";
+import { userInfos } from "../context";
+import DeleteUserPopupModal from "../components/DeleteUserPopupModal";
 
 function UserInfos() {
-  const iconStyles = { fontSize: "10rem" };
   const { enqueueSnackbar } = useSnackbar();
-
-  const [firstname, setFirstname] = useState();
-  const [lastname, setLastname] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [zipCode, setZipCode] = useState();
-  const [Adress, setAdress] = useState();
   const [userinfos, setUserinfos] = useState(null);
-
   const navigate = useNavigate();
-  const token = JSON.parse(localStorage.getItem("token"));
-  console.log(token);
-
+  const { token } = userInfos();
   const { userID } = useParams();
   console.log(userID);
 
   useEffect(() => {
-    const infos = async () => {
+    const fetchUserInfos = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3456/admin/user/${userID}`,
@@ -39,61 +29,18 @@ function UserInfos() {
           }
         );
         setUserinfos(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
+        setUserinfos(null);
       }
     };
-    infos();
-  }, [userID]);
-
-  if (!userinfos) {
-    return <ErrorPage />;
-  }
-  const updateUserInfos = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:3456/users/${userID}/update`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-        {
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          password: password,
-          zipCode: zipCode,
-          Adress: Adress,
-        }
-      );
-      setUserinfos(response.data);
-      console.log(response.data);
-      setFirstname("");
-      setLastname("");
-      setEmail("");
-      setPassword("");
-      setZipCode("");
-      setAdress("");
-      enqueueSnackbar("User successfully updated", {
-        variant: "success",
-        autoHideDuration: 2000,
-      });
-      navigate("/users");
-    } catch (error) {
-      enqueueSnackbar("Failed to update User", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-      console.error(error);
-    }
-  };
+    fetchUserInfos();
+  }, [userID, token]);
 
   const deleteUser = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3456/users/${userID}/delete`,
+        `http://localhost:3456/admin/user/${userID}/delete`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -105,7 +52,6 @@ function UserInfos() {
         variant: "success",
         autoHideDuration: 2000,
       });
-      console.log(response.data);
       navigate("/users");
     } catch (error) {
       enqueueSnackbar("Failed to delete User", {
@@ -115,6 +61,11 @@ function UserInfos() {
       console.error(error);
     }
   };
+
+  if (!userinfos) {
+    return <ErrorPage />;
+  }
+
   return (
     <>
       <Card className="">
@@ -141,7 +92,7 @@ function UserInfos() {
           </p>
           <div className="mt-4 flex space-x-3 lg:mt-6">
             <AdminEditUserModal />
-            <DeletePopup
+            <DeleteUserPopupModal
               deleteUser={deleteUser}
               firstname={userinfos.firstname}
             />

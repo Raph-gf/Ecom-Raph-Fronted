@@ -10,6 +10,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { GoPlus } from "react-icons/go";
+import { userInfos } from "../context";
 
 function CreateUserModal() {
   const [openModal, setOpenModal] = useState(false);
@@ -17,6 +18,8 @@ function CreateUserModal() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
+
+  const { token } = userInfos();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -38,11 +41,12 @@ function CreateUserModal() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3456/products/create-product`,
+        `http://localhost:3456/admin/products/create-product`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -55,12 +59,18 @@ function CreateUserModal() {
       enqueueSnackbar("Product successfully created", {
         variant: "success",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       setOpenModal(false);
     } catch (error) {
       enqueueSnackbar("Failed to create Product", {
         variant: "error",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       console.error(error);
     }

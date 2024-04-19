@@ -2,15 +2,13 @@ import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 function Card(product) {
-  console.log(product);
-
   return (
     <>
       <div className="w-full max-w-sm rounded-lg shadow-2xl hover:translate-y-2 duration-150 ease-in">
         <img
           className="px-2 pt-2 pb-3 rounded-2xl h-[360px] w-full"
           src={`http://localhost:3456/${product.images[0]}`}
-          alt="product image"
+          alt="produc t image"
         />
 
         <div className="px-2.5 pb-5 ">

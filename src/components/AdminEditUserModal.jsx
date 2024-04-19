@@ -1,7 +1,8 @@
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { userInfos } from "../context";
 import { useParams } from "react-router-dom";
 
 function AdminEditUserModal() {
@@ -12,11 +13,11 @@ function AdminEditUserModal() {
   const [zipCode, setZipCode] = useState();
   const [Adress, setAddress] = useState();
   const { enqueueSnackbar } = useSnackbar();
-  const { userID } = useParams();
-  console.log(userID);
 
-  const token = JSON.parse(localStorage.getItem("token"));
-  console.log(token);
+  const { token } = userInfos();
+  const { userID } = useParams();
+  // console.log(token);
+  // console.log(userId);
 
   useEffect(() => {
     const userData = async () => {
@@ -57,7 +58,7 @@ function AdminEditUserModal() {
         }
       );
 
-      console.log(response.data);
+      // console.log(response.data);
       setFirstname("");
       setLastname("");
       setEmail("");
@@ -66,13 +67,18 @@ function AdminEditUserModal() {
       setOpenModal(false);
       enqueueSnackbar("User successfully updated", {
         variant: "success",
-        autoHideDuration: 2500,
+        autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
-      window.location.reload();
     } catch (error) {
       enqueueSnackbar("Failed to update User", {
         variant: "error",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       console.error(error);
     }

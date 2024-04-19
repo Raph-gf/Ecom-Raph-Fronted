@@ -5,19 +5,16 @@ import ErrorPage from "./ErrorPage";
 import { IoCartOutline } from "react-icons/io5";
 import { useSnackbar } from "notistack";
 import { SiReactivex } from "react-icons/si";
-import { FaPlus } from "react-icons/fa6";
-import { FiMinus } from "react-icons/fi";
-
 import { Carousel } from "flowbite-react";
+import { userInfos } from "../context";
 
 function ProductDetails() {
+  const { userId } = userInfos();
   const { enqueueSnackbar } = useSnackbar();
   const [product, setProduct] = useState(null);
   const [cart, setCart] = useState([]);
   const { productId } = useParams();
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("user"));
-  const currentUser = userData ? userData.id : null;
   let [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
@@ -45,7 +42,7 @@ function ProductDetails() {
         price: product.price * quantity,
       };
       const response = await axios.post(
-        `http://localhost:3456/products/${productId}/addToCart/${currentUser}`,
+        `http://localhost:3456/products/${productId}/addToCart/${userId}`,
         data
       );
       setCart(response.data);

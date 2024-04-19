@@ -10,15 +10,14 @@ import {
   Textarea,
 } from "flowbite-react";
 import axios from "axios";
-
-const token = JSON.parse(localStorage.getItem("token"));
-console.log(token);
+import { userInfos } from "../context";
 
 function AdminEditProductModal() {
+  const { token } = userInfos();
   const [product, setProduct] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [name, setName] = useState("");
-  const [images, setImages] = useState();
+  const [images, setImages] = useState([]);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
 
@@ -88,13 +87,18 @@ function AdminEditProductModal() {
       enqueueSnackbar("Product successfully updated", {
         variant: "success",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       setOpenModal(false);
-      window.location.reload();
     } catch (error) {
       enqueueSnackbar("Failed to update Product", {
         variant: "error",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       console.error(error);
     }

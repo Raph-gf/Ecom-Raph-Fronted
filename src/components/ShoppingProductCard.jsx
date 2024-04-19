@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import { FiMinus } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
-import { Link } from "react-router-dom"; // Import de Link depuis React Router
 
 function ShoppingProductCard({
   Products,
   removeProductFromCart,
   handleAddQty,
 }) {
+  console.log(Products);
   const [quantity, setQuantity] = useState(Products.quantity);
   const iconStyles = { color: "black", fontSize: "1.3em" };
 
@@ -21,40 +19,44 @@ function ShoppingProductCard({
   };
 
   return (
-    <div className="product-card max-w-sm bg-white rounded-lg shadow-md">
-      <img
-        className="product-image rounded-t-2xl w-full mb-3"
-        src={`http://localhost:3456/${Products.product.images[0]}`}
-        alt="Product Image"
-      />
-      <div className="product-details px-3 pb-5">
-        {/* Utilisation de Link pour rendre le nom du produit cliquable */}
-        <Link to={`/products/${Products.product._id}`}>
-          <h5 className="product-name text-2xl font-bold text-gray-900 dark:text-black mb-7">
-            {Products.product.name}
-          </h5>
-        </Link>
-
-        <div className="product-quantity flex items-center">
-          <button onClick={handleAddQty}>++</button>
-          <h5 className="quantity-label text-md font-bold text-gray-900 dark:text-black">
-            Qty: {quantity}
-          </h5>
-        </div>
-        <div className="product-price flex items-center justify-between mt-3">
-          <span className="text-3xl font-bold text-gray-900 dark:text-black">
-            {Products.product.price}$
-          </span>
-          <button
-            className="delete-btn flex items-center gap-3 bg-orange-200 hover:scale-110 duration-200 font-medium rounded-lg text-sm px-2 py-2 mr-9"
-            onClick={handleRemove}
-          >
-            Delete
-            <MdDeleteForever />
-          </button>
+    <>
+      <div className="container mx-10 bg-black  w-screen">
+        <div className="card-container flex w-full ">
+          <div className="card w-full p-4 flex flex-row items-center justify-evenly text-white ">
+            <div className="left-items-sec">
+              <div className="items-infos flex flex-row items-center gap-4">
+                <div className="items-image">
+                  <img
+                    className="px-2 pt-2 pb-3 rounded-2xl h-[100px] w-full"
+                    src={`http://localhost:3456/${Products.product.images[0]}`}
+                    alt="produc t image"
+                  />
+                </div>
+                <div className="items-text flex flex-col">
+                  <h1 className="items-title">{Products.product.name}</h1>
+                  <div className="items-description text-xs mr-4">
+                    {Products.product.description
+                      .split(" ")
+                      .slice(0, 30)
+                      .join(" ")}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="items-number-infos flex flex-row gap-10 items-center">
+              <div className="items-quantity">
+                <input type="number" />
+              </div>
+              <div className="items-price">$ {Products.product.price}</div>
+              <div className="items-button">
+                <MdDeleteForever />
+              </div>
+            </div>
+          </div>
+          <hr />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
