@@ -3,10 +3,13 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import ShoppingProductCard from "../components/ShoppingProductCard";
 import { userInfos } from "../context";
+import { Link } from "react-router-dom";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
 
 function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
-  const { userId } = userInfos();
+  const { userId, username } = userInfos();
   const [shoppingCart, setShoppingCart] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [pay, setPay] = useState(null);
@@ -98,37 +101,20 @@ function ShoppingCart() {
 
   return (
     <section className="cart-wrapper">
-      {/* <div className="cart-header text-5xl font-bold pl-10 mt-16 mb-11 text-gray-900 dark:text-black">
-        Shopping Cart de {userName}
-        <div className="total-price flex flex-col justify-center items-start">
-          <div className="price&pay flex flex-row items-center justify-center gap-3">
-            <h1 className="text-4xl font-bold mb-3 mt-9">Total Price</h1>
-          </div>
-
-          <p className="text-3xl font-normal mt-2">{totalProduct()}$</p>
-          
-        </div>
-      </div> */}
-      <button
-        className="buy-btn flex flex-row text-lg items-center gap-2 bg-orange-200 p-3 rounded-xl mt-5 "
-        onClick={() => {
-          handlePayment();
-        }}
-      >
-        <p>Buy</p>
-      </button>
-      <div className="items-wrapper">
+      <div className="cart-header text-3xl font-bold pl-10 mt-16 mb-8 text-gray-900 dark:text-black ">
+        Shopping Cart de {username}
+      </div>
+      <div className="border border-b-2 border-black border-opacity-50"></div>
+      <div className="items-wrapper w-screen mt-2">
         <div className="">
           {Array.isArray(shoppingCart) && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
-              // <Link to={`/products/${product._id}`} key={index}>
               <ShoppingProductCard
                 key={index}
                 Products={product}
                 removeProductFromCart={removeProductFromCart}
                 handleAddQty={handleAddQty}
               />
-              // </Link>
             ))
           ) : (
             <div className="empty-cart flex flex-col justify-center items-center ">
@@ -137,6 +123,32 @@ function ShoppingCart() {
               </p>
             </div>
           )}
+
+          <div className="flex justify-between items-center mx-10 mb-4 p-6 ">
+            <div className="flex items-center gap-2">
+              <FaLongArrowAltLeft style={{ color: "orange" }} />
+              <Link to="/all-products">
+                <span className="text-md font-medium text-orange-400">
+                  Continue Shopping
+                </span>
+              </Link>
+            </div>
+            <div className="flex justify-center items-center">
+              <span className="text-lg font-medium text-gray-400 mr-3">
+                Subtotal:
+              </span>
+              <span className="text-xl font-bold text-gray-800 ">
+                ${totalProduct()}
+              </span>
+            </div>
+            <button
+              onClick={handlePayment}
+              className="buy-btn flex items-center gap-3 bg-orange-300 p-2 rounded-lg text-black text-md font-semibold"
+            >
+              <FaCartShopping />
+              Buy
+            </button>
+          </div>
         </div>
       </div>
     </section>

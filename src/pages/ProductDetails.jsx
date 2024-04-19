@@ -10,10 +10,12 @@ import { userInfos } from "../context";
 
 function ProductDetails() {
   const { userId } = userInfos();
+  console.log(userId);
   const { enqueueSnackbar } = useSnackbar();
   const [product, setProduct] = useState(null);
   const [cart, setCart] = useState([]);
   const { productId } = useParams();
+  console.log(productId);
   const navigate = useNavigate();
   let [quantity, setQuantity] = useState(0);
 
