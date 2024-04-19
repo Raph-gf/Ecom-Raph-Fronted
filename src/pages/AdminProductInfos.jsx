@@ -3,16 +3,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import DeletePopup from "../components/DeletePopupProductModal";
 import AdminEditProductModal from "../components/AdminEditProductModal";
-
 import { Carousel } from "flowbite-react";
 import { SiReactivex } from "react-icons/si";
+import { userInfos } from "../context";
+import DeleteProductPopup from "../components/DeleteProductPopupModal";
 
 function ProductInfos() {
   const [product, setProduct] = useState("");
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { userId, token } = userInfos();
 
   const { productID } = useParams();
   console.log(productID);
@@ -39,7 +41,12 @@ function ProductInfos() {
   const deleteProduct = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3456/products/delete-product/${productID}`
+        `http://localhost:3456/admin/products/delete-product/${productID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setProduct(response.data);
       console.log(response.data);
@@ -114,7 +121,7 @@ function ProductInfos() {
 
             <div className="btn-wrapper flex gap-3">
               <button className="btn-deleteProduct ">
-                <DeletePopup
+                <DeleteProductPopup
                   className="rounded-xl bg-red-500 hover:bg-red-600"
                   deleteProduct={deleteProduct}
                 />

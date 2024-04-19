@@ -1,21 +1,13 @@
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { useParams } from "react-router-dom";
 
-function DeletePopup({ deleteUser, firstname }) {
+function DeleteProductPopup({ deleteProduct }) {
   const [openModal, setOpenModal] = useState(false);
-  const { userID } = useParams();
-  console.log(userID);
 
   return (
     <>
-      <button
-        className="bg-orange-200 rounded-3xl px-6 py-3 font-bold hover:bg-none "
-        onClick={() => setOpenModal(true)}
-      >
-        Delete
-      </button>
+      <Button onClick={() => setOpenModal(true)}>Delete</Button>
       <Modal
         show={openModal}
         size="md"
@@ -27,16 +19,17 @@ function DeletePopup({ deleteUser, firstname }) {
           <div className="text-center">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete {firstname.firstname}?
+              Are you sure you want to delete ?
             </h3>
             <div className="flex justify-center gap-4">
               <Button
                 color="failure"
                 onClick={() => {
-                  deleteUser(), setOpenModal(false);
+                  deleteProduct();
+                  setOpenModal(false);
                 }}
               >
-                Yes im sure
+                Yes I'm sure
               </Button>
               <Button color="gray" onClick={() => setOpenModal(false)}>
                 No, cancel
@@ -49,4 +42,4 @@ function DeletePopup({ deleteUser, firstname }) {
   );
 }
 
-export default DeletePopup;
+export default DeleteProductPopup;

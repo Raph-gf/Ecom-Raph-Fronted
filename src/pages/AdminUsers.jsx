@@ -3,15 +3,22 @@ import Table from "../components/Table";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CreateUserModal from "../components/CreateUserModal";
+import { userInfos } from "../context";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
+  const { token } = userInfos();
 
   useEffect(() => {
     const getAllUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3456/users/allusers"
+          "http://localhost:3456/admin/user/allusers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setUsers(response.data);
         console.log(response.data);
@@ -20,7 +27,7 @@ function AdminUsers() {
       }
     };
     getAllUsers();
-  }, []);
+  }, [token]);
 
   return (
     <>
@@ -28,16 +35,17 @@ function AdminUsers() {
         <h1>Users</h1>
         <CreateUserModal />
       </div>
-      {users.map((user, index) => (
-        <Link to={`/users/${user._id}`} key={index}>
-          <Table
-            key={index}
-            firstname={user.firstname}
-            lastname={user.lastname}
-            email={user.email}
-          />
-        </Link>
-      ))}
+      {Array.isArray(users) &&
+        users.map((user, index) => (
+          <Link to={`/users/${user._id}`} key={index}>
+            <Table
+              key={index}
+              firstname={user.firstname}
+              lastname={user.lastname}
+              email={user.email}
+            />
+          </Link>
+        ))}
     </>
   );
 }

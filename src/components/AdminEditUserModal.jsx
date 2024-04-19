@@ -1,7 +1,8 @@
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { userInfos } from "../context";
 import { useParams } from "react-router-dom";
 
 function AdminEditUserModal() {
@@ -12,22 +13,52 @@ function AdminEditUserModal() {
   const [zipCode, setZipCode] = useState();
   const [Adress, setAddress] = useState();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { token } = userInfos();
   const { userID } = useParams();
-  console.log(userID);
+  // console.log(token);
+  // console.log(userId);
+
+  useEffect(() => {
+    const userData = async () => {
+      const response = await axios.get(
+        `http://localhost:3456/admin/user/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const fetchedUser = response.data;
+      console.log(fetchedUser);
+      setFirstname(fetchedUser.firstname);
+      setLastname(fetchedUser.lastname);
+      setEmail(fetchedUser.email);
+      setZipCode(fetchedUser.zipCode);
+      setAddress(fetchedUser.Adress);
+    };
+    userData();
+  }, []);
 
   const updateUserInfos = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:3456/users/${userID}/update`,
+        `http://localhost:3456/admin/user/${userID}/update`,
         {
           firstname: firstname,
           lastname: lastname,
           email: email,
           zipCode: zipCode,
           Adress: Adress,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      console.log(response.data);
+
+      // console.log(response.data);
       setFirstname("");
       setLastname("");
       setEmail("");
@@ -36,12 +67,18 @@ function AdminEditUserModal() {
       setOpenModal(false);
       enqueueSnackbar("User successfully updated", {
         variant: "success",
-        autoHideDuration: 2500,
+        autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
     } catch (error) {
       enqueueSnackbar("Failed to update User", {
         variant: "error",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       console.error(error);
     }
@@ -52,7 +89,7 @@ function AdminEditUserModal() {
       <Button onClick={() => setOpenModal(true)}>Edit</Button>
       <Modal
         show={openModal}
-        size="sm"
+        size="lg"
         onClose={() => setOpenModal(false)}
         popup
       >

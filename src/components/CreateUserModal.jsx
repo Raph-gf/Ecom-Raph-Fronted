@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { GoPlus } from "react-icons/go";
+import { userInfos } from "../context";
 
 function CreateUserModal() {
   const [openModal, setOpenModal] = useState(false);
@@ -13,17 +14,26 @@ function CreateUserModal() {
   const [Adress, setAdress] = useState("");
   const [password, setPassword] = useState("");
   const { enqueueSnackbar } = useSnackbar();
+  const { userId, token } = userInfos();
 
   const createUser = async () => {
     try {
-      const response = await axios.post(`http://localhost:3456/users/create`, {
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: password,
-        zipCode: zipCode,
-        Adress: Adress,
-      });
+      const response = await axios.post(
+        `http://localhost:3456/users/create`,
+        {
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          password: password,
+          zipCode: zipCode,
+          Adress: Adress,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(response.data);
       setFirstname("");
       setLastname("");
@@ -34,12 +44,18 @@ function CreateUserModal() {
       enqueueSnackbar("User successfully created", {
         variant: "success",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       setOpenModal(false);
     } catch (error) {
       enqueueSnackbar("Failed to create User", {
         variant: "error",
         autoHideDuration: 2000,
+        onClose: () => {
+          window.location.reload();
+        },
       });
       console.error(error);
     }
