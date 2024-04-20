@@ -17,14 +17,17 @@ function CreateUser() {
   const createUser = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3456/users/create`, {
-        firstname,
-        lastname,
-        email,
-        password,
-        zipCode,
-        address,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/users/create`,
+        {
+          firstname,
+          lastname,
+          email,
+          password,
+          zipCode,
+          address,
+        }
+      );
       console.log(response.data);
       setFirstname("");
       setLastname("");

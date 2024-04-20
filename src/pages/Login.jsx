@@ -20,7 +20,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3456/users/connexion",
+        `${import.meta.env.VITE_SERVER_URL}/users/connexion`,
         { email, password }
       );
       console.log(response.data);

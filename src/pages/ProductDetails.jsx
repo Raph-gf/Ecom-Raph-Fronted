@@ -10,10 +10,12 @@ import { userInfos } from "../context";
 
 function ProductDetails() {
   const { userId } = userInfos();
+  console.log(userId);
   const { enqueueSnackbar } = useSnackbar();
   const [product, setProduct] = useState(null);
   const [cart, setCart] = useState([]);
   const { productId } = useParams();
+  console.log(productId);
   const navigate = useNavigate();
   let [quantity, setQuantity] = useState(0);
 
@@ -42,7 +44,9 @@ function ProductDetails() {
         price: product.price * quantity,
       };
       const response = await axios.post(
-        `http://localhost:3456/products/${productId}/addToCart/${userId}`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/products/${productId}/addToCart/${userId}`,
         data
       );
       setCart(response.data);
@@ -73,7 +77,7 @@ function ProductDetails() {
         <div className="flex flex-row justify-between  gap-4 px-12 py-10 md:flex-no-wrap">
           {/* Section de l'image du produit */}
           <div className="product-image md:w-1/2 md:mb-0">
-            <div className="rounded-lg h-[700px] bg-gray-200">
+            <div className="rounded-lg h-[650px] bg-gray-200">
               <Carousel pauseOnHover>
                 <img
                   className="w-full h-full object-fill rounded-lg"
@@ -114,15 +118,15 @@ function ProductDetails() {
                 {product.description}
               </p>
             </div>
-            <div className="product-price flex pb-8 mb-4">
+            <div className="product-price flex pb-8 mt-16 mb-4">
               <div className="text-black">
-                <span className="price-value text-5xl  font-bold text-black">
-                  ${product.price * quantity}
+                <span className="price-value text-6xl  font-bold text-black">
+                  ${product.price}
                 </span>
               </div>
             </div>
             {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
-            <div className="flex gap-7 w-full">
+            <div className="flex gap-7 mt-10 w-full">
               <button
                 onClick={addProductToCart}
                 className="add-to-cart-btn flex items-center justify-center w-full p-4 gap-4 rounded-md bg-black text-white font-bold shadow-2xl hover:bg-orange-200 hover:text-black "

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Table from "../components/Table";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CreateUserModal from "../components/CreateUserModal";
 import { userInfos } from "../context";
+import TableUser from "../components/TableUser";
 
 function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -13,7 +13,7 @@ function AdminUsers() {
     const getAllUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3456/admin/user/allusers",
+          `${import.meta.env.VITE_SERVER_URL}/admin/user/allusers`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -31,14 +31,14 @@ function AdminUsers() {
 
   return (
     <>
-      <div className="users flex flex-col gap-10 justify-center items-center text-3xl px-10 mb-10">
+      <div className="users-container flex items-center gap-10 justify-start text-3xl pb-3 px-12 mt-16 mb-10">
         <h1>Users</h1>
         <CreateUserModal />
       </div>
       {Array.isArray(users) &&
         users.map((user, index) => (
           <Link to={`/users/${user._id}`} key={index}>
-            <Table
+            <TableUser
               key={index}
               firstname={user.firstname}
               lastname={user.lastname}

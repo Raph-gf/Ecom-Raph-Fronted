@@ -10,7 +10,7 @@ function Allproducts() {
     const displayProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3456/products/all-products"
+          `${import.meta.env.VITE_SERVER_URL}/products/all-products`
         );
         setAllProducts(response.data);
       } catch (error) {
@@ -24,8 +24,8 @@ function Allproducts() {
     <>
       <div className="text-section w-full">
         <div className="text-section w-full">
-          <h1 className="title text-4xl w-full mb-8 font-bold px-7 mt-16">
-            <span className="text-orange-300 mr-2">S</span>hop
+          <h1 className="title text-6xl w-full mb-8 font-bold px-7 mt-16">
+            <span className="text-orange-300">S</span>hop
           </h1>
         </div>
       </div>

@@ -41,7 +41,7 @@ function CreateUserModal() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3456/admin/products/create-product`,
+        `${import.meta.env.VITE_SERVER_URL}/admin/products/create-product`,
         formData,
         {
           headers: {
@@ -78,9 +78,9 @@ function CreateUserModal() {
 
   return (
     <>
-      <div className="btn flex gap-1 hover:text-orange-400 ">
-        <GoPlus fontSize="1.2rem" />
-        <button className="bg-none text-xs" onClick={() => setOpenModal(true)}>
+      <div className="btn flex gap-1  hover:text-orange-400 ">
+        <GoPlus className="" fontSize="1.2rem" />
+        <button className="bg-none text-xs " onClick={() => setOpenModal(true)}>
           Create Product
         </button>
       </div>

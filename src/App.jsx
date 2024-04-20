@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Hompage";
 import Login from "./pages/Login";
 import SignIn from "./pages/SIgn-In";
-import NavBar from "./components/NavBar";
 import Allproducts from "./pages/Allproducts";
 import ProductDetails from "./pages/ProductDetails";
 import ShoppingCart from "./pages/ShoppingCart";
@@ -14,6 +13,7 @@ import AdminProduct from "./pages/AdminProduct";
 import ProductInfos from "./pages/AdminProductInfos";
 import CreateProduct from "./pages/CreateProduct";
 import PayementPage from "./pages/PayementPage";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (

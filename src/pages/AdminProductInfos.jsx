@@ -23,7 +23,7 @@ function ProductInfos() {
     const infos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3456/products/${productID}`
+          `${import.meta.env.VITE_SERVER_URL}/products/${productID}`
         );
         setProduct(response.data);
         console.log(response.data);

@@ -14,7 +14,7 @@ function CreateProduct() {
   const createProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3456/products/create-product`,
+        `${import.meta.env.VITE_SERVER_URL}/products/create-product`,
         {
           image: images,
           name: name,

@@ -2,21 +2,13 @@ import { SiReactivex } from "react-icons/si";
 import { TiHome } from "react-icons/ti";
 import { IoCart } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { Avatar } from "flowbite-react";
+import { userInfos } from "../context";
 
 function NavBar() {
   const iconStyles = { fontSize: "1.3em" };
-
   const navigate = useNavigate();
-  const [token, setToken] = useState("");
-
-  const userData = JSON.parse(localStorage.getItem("user"));
-  const userProfile = userData ? userData.name : "";
-  const userId = localStorage.getItem("user");
-  const currentUser = userId ? JSON.parse(userId).id : null;
-  console.log(currentUser);
-  // console.log(userData.cart);
+  const { username, userId, userRole } = userInfos();
 
   const Logout = () => {
     localStorage.removeItem("user");
@@ -26,9 +18,9 @@ function NavBar() {
 
   return (
     <>
-      {userData && userData.role === "admin" ? (
+      {userRole === "admin" ? (
         <nav className="navbar bg-white border-gray-200 w-screen">
-          <div className="navbar-content w-screen-xl flex flex-wrap items-center justify-between mx-auto px-10 pt-6 mb-6">
+          <div className="navbar-content w-screen-xl flex flex-wrap items-center justify-between mx-auto px-10 pt-10 ">
             <Link
               to="/"
               className="brand flex items-center space-x-3 rtl:space-x-reverse"
@@ -73,9 +65,15 @@ function NavBar() {
                     Products
                   </Link>
                 </li>
+                <Link
+                  to={`/${userId}/cart`}
+                  className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-400 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  <IoCart style={iconStyles} />
+                </Link>
 
                 <div className="profile flex flex-row items-center gap-3">
-                  <li className="nav-items">Welcome {userProfile}</li>
+                  <li className="nav-items">Welcome {username}</li>
 
                   <div className="avatar-container flex flex-wrap gap-2">
                     <Avatar rounded />
@@ -166,18 +164,18 @@ function NavBar() {
                     </button>
                   </Link>
                 </li>
-                {userData ? (
+                {userRole ? (
                   <>
                     <li>
                       <Link
-                        to={`/${currentUser}/cart`}
+                        to={`/${userId}/cart`}
                         className="menu-link py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-400 md:p-0 dark:text-black md:dark:hover:text-orange-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                       >
                         <IoCart style={iconStyles} />
                       </Link>
                     </li>
                     <div className="profile flex flex-row items-center gap-1">
-                      <li className="nav-items">Welcome {userProfile}</li>
+                      <li className="nav-items">Welcome {username}</li>
 
                       <div className="avatar-container flex flex-wrap gap-2">
                         <Avatar rounded />
