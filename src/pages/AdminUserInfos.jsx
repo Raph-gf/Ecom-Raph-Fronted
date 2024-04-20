@@ -21,7 +21,7 @@ function UserInfos() {
     const fetchUserInfos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3456/admin/user/${userID}`,
+          `${import.meta.env.VITE_SERVER_URL}/admin/user/${userID}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

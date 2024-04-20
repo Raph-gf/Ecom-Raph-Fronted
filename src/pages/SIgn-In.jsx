@@ -24,7 +24,7 @@ function SignIn() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3456/users/inscription",
+        `${import.meta.env.VITE_SERVER_URL}/users/inscription`,
         {
           email,
           password,

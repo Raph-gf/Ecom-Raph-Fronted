@@ -19,7 +19,7 @@ function Homepage() {
     const displayProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3456/products/all-products"
+          `${import.meta.env.VITE_SERVER_URL}/products/all-products`
         );
         console.log(response.data);
         setProducts(response.data);

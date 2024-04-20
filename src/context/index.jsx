@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
   const [username, setUsername] = useState(null);
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));
@@ -15,11 +16,21 @@ export const UserProvider = ({ children }) => {
     setUserId(userData ? userData.id : null);
     setUsername(userData ? userData.name : null);
     setToken(userToken ? userToken : null);
+    setUserRole(userData ? userData.role : null);
   }, []);
 
   return (
     <UserContext.Provider
-      value={{ username, setUsername, token, setToken, userId, setUserId }}
+      value={{
+        username,
+        setUsername,
+        token,
+        setToken,
+        userId,
+        setUserId,
+        userRole,
+        setUserRole,
+      }}
     >
       {children}
     </UserContext.Provider>

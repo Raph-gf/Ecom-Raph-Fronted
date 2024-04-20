@@ -19,7 +19,7 @@ function CreateUserModal() {
   const createUser = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3456/users/create`,
+        `${import.meta.env.VITE_SERVER_URL}/users/create`,
         {
           firstname: firstname,
           lastname: lastname,

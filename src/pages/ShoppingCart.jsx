@@ -11,14 +11,14 @@ function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
   const { userId, username } = userInfos();
   const [shoppingCart, setShoppingCart] = useState([]);
-  const [quantity, setQuantity] = useState(1);
   const [pay, setPay] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchUserCartProducts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3456/products/${userId}/cart`
+          `${import.meta.env.VITE_SERVER_URL}/products/${userId}/cart`
         );
         setShoppingCart(response.data.Products);
         console.log(response.data);
@@ -95,25 +95,40 @@ function ShoppingCart() {
       return 0;
     }
     return shoppingCart
-      .reduce((acc, product) => acc + product.product.price, 0)
+      .reduce((acc, product) => acc + product.product.price * quantity, 0)
       .toFixed(2);
   };
 
+  const incrementQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
   return (
-    <section className="cart-wrapper">
+    <section className="cart-wrapper mx-auto ">
       <div className="cart-header text-3xl font-bold pl-10 mt-16 mb-8 text-gray-900 dark:text-black ">
         Shopping Cart de {username}
       </div>
-      <div className="border border-b-2 border-black border-opacity-50"></div>
-      <div className="items-wrapper w-screen mt-2">
+      <div className="border border-b-1"></div>
+      <div className="items-wrapper flex  mt-5">
         <div className="">
           {Array.isArray(shoppingCart) && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
               <ShoppingProductCard
                 key={index}
                 Products={product}
-                removeProductFromCart={removeProductFromCart}
-                handleAddQty={handleAddQty}
+                RemoveProductFromCart={removeProductFromCart}
+                Quantity={product.quantity}
+                incrementQuantity={() => incrementQuantity(product._id)}
+                decrementQuantity={() => decrementQuantity(product._id)}
+                setQuantity={(newQuantity) =>
+                  handleSetQuantity(product._id, newQuantity)
+                }
               />
             ))
           ) : (

@@ -34,7 +34,7 @@ function AdminEditProductModal() {
   useEffect(() => {
     const productData = async () => {
       const response = await axios.get(
-        `http://localhost:3456/admin/products/${productID}`,
+        `${import.meta.env.VITE_SERVER_URL}/admin/products/${productID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,7 +67,9 @@ function AdminEditProductModal() {
 
       // Mettre à jour le produit avec les nouvelles informations
       const updateResponse = await axios.put(
-        `http://localhost:3456/admin/products/update-product/${productID}`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/admin/products/update-product/${productID}`,
         formData,
         {
           headers: {

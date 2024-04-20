@@ -16,13 +16,11 @@ function AdminEditUserModal() {
 
   const { token } = userInfos();
   const { userID } = useParams();
-  // console.log(token);
-  // console.log(userId);
 
   useEffect(() => {
     const userData = async () => {
       const response = await axios.get(
-        `http://localhost:3456/admin/user/${userID}`,
+        `${import.meta.env.VITE_SERVER_URL}/admin/user/${userID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +41,7 @@ function AdminEditUserModal() {
   const updateUserInfos = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:3456/admin/user/${userID}/update`,
+        `${import.meta.env.VITE_SERVER_URL}/admin/user/${userID}/update`,
         {
           firstname: firstname,
           lastname: lastname,
