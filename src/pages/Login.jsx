@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { FaEye } from "react-icons/fa";
 import { useSnackbar } from "notistack";
 
 function Login() {
@@ -65,6 +66,7 @@ function Login() {
             onSubmit={handleUserLogin}
             className="mx-auto mb-0 mt-8 max-w-md space-y-4"
           >
+            {/* Input pour l'email */}
             <div>
               <label htmlFor="email" className="sr-only">
                 Email
@@ -72,15 +74,16 @@ function Login() {
               <div className="relative">
                 <input
                   type="email"
-                  className="input-field"
+                  className=" input-field w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                {/* Icône pour l'email */}
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="icon"
+                    className="size-4 text-gray-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -96,6 +99,7 @@ function Login() {
               </div>
             </div>
 
+            {/* Input pour le mot de passe */}
             <div>
               <label htmlFor="password" className="sr-only">
                 Password
@@ -103,15 +107,16 @@ function Login() {
               <div className="relative">
                 <input
                   type="password"
-                  className="input-field"
+                  className=" input-field w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                {/* Icône pour le mot de passe */}
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="icon"
+                    className="size-4 text-gray-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -132,7 +137,6 @@ function Login() {
                 </span>
               </div>
             </div>
-
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">No account?</p>
               <Link
