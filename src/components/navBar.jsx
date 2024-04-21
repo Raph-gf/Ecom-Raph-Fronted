@@ -164,7 +164,7 @@ function NavBar() {
                     </button>
                   </Link>
                 </li>
-                {userRole ? (
+                {userRole === "user" ? (
                   <>
                     <li>
                       <Link

@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import { IoCartOutline } from "react-icons/io5";
 import { useSnackbar } from "notistack";
-import { SiReactivex } from "react-icons/si";
 import { Carousel } from "flowbite-react";
 import { userInfos } from "../context";
 
@@ -12,25 +11,21 @@ function ProductDetails() {
   const { userId } = userInfos();
   console.log(userId);
   const { enqueueSnackbar } = useSnackbar();
+  const { productId } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [cart, setCart] = useState([]);
-  const { productId } = useParams();
-  console.log(productId);
-  const navigate = useNavigate();
-  let [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3456/products/${productId}`
+          `${import.meta.env.VITE_SERVER_URL}/products/${productId}`
         );
         setProduct(response.data);
         setQuantity(response.data.quantity);
-        console.log(response.data);
-        console.log(response.data.quantity);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching product:", error);
       }
     };
 
@@ -40,8 +35,7 @@ function ProductDetails() {
   const addProductToCart = async () => {
     try {
       const data = {
-        quantity: quantity,
-        price: product.price * quantity,
+        price: product.price,
       };
       const response = await axios.post(
         `${
@@ -63,7 +57,7 @@ function ProductDetails() {
           autoHideDuration: 4000,
         }
       );
-      console.error(error);
+      console.error("Error adding product to cart:", error);
     }
   };
 
@@ -73,42 +67,23 @@ function ProductDetails() {
 
   return (
     <>
-      <div className="product-container ">
-        <div className="flex flex-row justify-between  gap-4 px-12 py-10 md:flex-no-wrap">
-          {/* Section de l'image du produit */}
-          <div className="product-image md:w-1/2 md:mb-0">
+      <div className="product-details-container">
+        <div className="flex flex-row justify-between gap-4 px-12 py-10 md:flex-no-wrap">
+          <div className="product-image-container md:w-1/2 md:mb-0">
             <div className="rounded-lg h-[650px] bg-gray-200">
               <Carousel pauseOnHover>
-                <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={`http://localhost:3456/${product.images[0]}`}
-                  alt="Product Image"
-                />
-                <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={`http://localhost:3456/${product.images[1]}`}
-                  alt="Product Image"
-                />
-                <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={`http://localhost:3456/${product.images[2]}`}
-                  alt="Product Image"
-                />
+                {product.images.map((image, index) => (
+                  <img
+                    key={index}
+                    className="w-full h-full object-fill rounded-lg"
+                    src={`${import.meta.env.VITE_SERVER_URL}/${image}`}
+                    alt={`Product Image ${index + 1}`}
+                  />
+                ))}
               </Carousel>
             </div>
           </div>
-
-          {/* Section des détails du produit */}
           <div className="product-details md:w-1/2 px-4">
-            <div className="website-name flex items-center gap-3 text-orange-300 pt-9 pb-6">
-              ECOM
-              <div className="icon">
-                <SiReactivex />
-              </div>
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">
-                RAPH
-              </span>
-            </div>
             <h2 className="product-name text-6xl font-bold w-full text-black mb-10">
               {product.name}
             </h2>
@@ -125,7 +100,6 @@ function ProductDetails() {
                 </span>
               </div>
             </div>
-            {/* Bouton pour ajouter le produit au panier et modifier la quantité */}
             <div className="flex gap-7 mt-10 w-full">
               <button
                 onClick={addProductToCart}

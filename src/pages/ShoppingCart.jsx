@@ -32,7 +32,9 @@ function ShoppingCart() {
   const removeProductFromCart = async (productId) => {
     try {
       await axios.delete(
-        `http://localhost:3456/products/${productId}/cart/${userId}`
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/products/${productId}/cart/${userId}`
       );
 
       // Mise à jour du panier en filtrant le produit supprimé
@@ -56,7 +58,9 @@ function ShoppingCart() {
   const handleAddQty = async (productId) => {
     try {
       const response = await axios.post(
-        `http://localhost:3456/products/${userId}/updateProductQuantity/add`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/products/${userId}/updateProductQuantity/add`,
         {
           productId: "660fc404be865742a050a1ff",
         }
@@ -71,7 +75,7 @@ function ShoppingCart() {
   const handlePayment = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3456/payment/stripe/${userId}`
+        `${import.meta.env.VITE_SERVER_URL}/payment/stripe/${userId}`
       );
       setPay(response.data.url);
       console.log(response.data.url);
@@ -115,8 +119,8 @@ function ShoppingCart() {
         Shopping Cart de {username}
       </div>
       <div className="border border-b-1"></div>
-      <div className="items-wrapper flex  mt-5">
-        <div className="">
+      <div className="items-wrapper flex w-screen mt-5">
+        <div className="cart-content w-screen">
           {Array.isArray(shoppingCart) && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
               <ShoppingProductCard

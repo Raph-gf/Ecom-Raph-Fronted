@@ -3,11 +3,11 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
 
-function Allproducts() {
-  const [allproducts, setAllProducts] = useState([]);
+function AllProducts() {
+  const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
-    const displayProducts = async () => {
+    const fetchAllProducts = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/products/all-products`
@@ -17,7 +17,7 @@ function Allproducts() {
         console.error("Error fetching products:", error);
       }
     };
-    displayProducts();
+    fetchAllProducts();
   }, []);
 
   return (
@@ -25,12 +25,12 @@ function Allproducts() {
       <div className="text-section w-full">
         <div className="text-section w-full">
           <h1 className="title text-6xl w-full mb-8 font-bold px-7 mt-16">
-            <span className="text-orange-300">S</span>hop
+            <span className="text-orange-300">S</span>HOP
           </h1>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-x-10 gap-y-7 w-screen px-7 ">
-        {allproducts.map((product, index) => (
+        {allProducts.map((product, index) => (
           <Link to={`/products/${product._id}`} key={index}>
             <Card
               key={index}
@@ -46,4 +46,4 @@ function Allproducts() {
   );
 }
 
-export default Allproducts;
+export default AllProducts;

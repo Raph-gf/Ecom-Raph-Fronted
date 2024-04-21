@@ -29,7 +29,7 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(decodedUser));
       localStorage.setItem("token", JSON.stringify(response.data.token));
       setToken(response.data.token);
-      enqueueSnackbar("Connexion succesfully completed", {
+      enqueueSnackbar("Connexion successfully completed", {
         variant: "success",
         autoHideDuration: 2000,
       });
@@ -45,8 +45,8 @@ function Login() {
 
   return (
     <>
-      <section className="relative flex flex-wrap px-8 lg:h-screen lg:items-center">
-        <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
+      <section className="welcome-section relative flex flex-wrap px-8 lg:h-screen lg:items-center">
+        <div className="login-form w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
             <h1 className="text-8xl font-bold sm:text-3xl">
               Get started today!
@@ -62,11 +62,9 @@ function Login() {
           </div>
 
           <form
-            action="#"
             onSubmit={handleUserLogin}
             className="mx-auto mb-0 mt-8 max-w-md space-y-4"
           >
-            {/* Input pour l'email */}
             <div>
               <label htmlFor="email" className="sr-only">
                 Email
@@ -74,16 +72,15 @@ function Login() {
               <div className="relative">
                 <input
                   type="email"
-                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  className="input-field"
                   placeholder="Enter email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {/* Icône pour l'email */}
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="size-4 text-gray-400"
+                    className="icon"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -99,7 +96,6 @@ function Login() {
               </div>
             </div>
 
-            {/* Input pour le mot de passe */}
             <div>
               <label htmlFor="password" className="sr-only">
                 Password
@@ -107,16 +103,15 @@ function Login() {
               <div className="relative">
                 <input
                   type="password"
-                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                  className="input-field"
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {/* Icône pour le mot de passe */}
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="size-4 text-gray-400"
+                    className="icon"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -138,19 +133,18 @@ function Login() {
               </div>
             </div>
 
-            {/* Bouton de soumission */}
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">No account?</p>
               <Link
-                to="/sign-in"
-                className="underline text-sm text-gray-500"
+                to="/sign-up"
+                className="signup-link underline text-sm text-gray-500"
                 href="#"
               >
                 Sign up
               </Link>
               <button
                 type="submit"
-                className="inline-block rounded-lg bg-orange-200 px-5 py-3 text-sm font-medium text-black"
+                className="login-btn inline-block rounded-lg bg-orange-200 px-5 py-3 text-sm font-medium text-black"
               >
                 Login in
               </button>
@@ -158,8 +152,7 @@ function Login() {
           </form>
         </div>
 
-        {/* Image à droite */}
-        <div className="relative h-40 w-full  sm:h-96 lg:h-full lg:w-1/2">
+        <div className="relative h-40 w-full sm:h-96 lg:h-full lg:w-1/2">
           <img
             alt=""
             src="https://images.unsplash.com/photo-1630450202872-e0829c9d6172?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto"

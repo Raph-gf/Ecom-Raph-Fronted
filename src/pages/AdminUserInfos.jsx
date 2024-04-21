@@ -11,14 +11,13 @@ import DeleteUserPopupModal from "../components/DeleteUserPopupModal";
 
 function UserInfos() {
   const { enqueueSnackbar } = useSnackbar();
-  const [userinfos, setUserinfos] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
   const { token } = userInfos();
   const { userID } = useParams();
-  console.log(userID);
 
   useEffect(() => {
-    const fetchUserInfos = async () => {
+    const fetchUserInfo = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/admin/user/${userID}`,
@@ -28,13 +27,13 @@ function UserInfos() {
             },
           }
         );
-        setUserinfos(response.data);
+        setUserInfo(response.data);
       } catch (error) {
         console.error(error);
-        setUserinfos(null);
+        setUserInfo(null);
       }
     };
-    fetchUserInfos();
+    fetchUserInfo();
   }, [userID, token]);
 
   const deleteUser = async () => {
@@ -47,7 +46,7 @@ function UserInfos() {
           },
         }
       );
-      setUserinfos(response.data);
+      setUserInfo(response.data);
       enqueueSnackbar("User successfully deleted", {
         variant: "success",
         autoHideDuration: 2000,
@@ -62,39 +61,39 @@ function UserInfos() {
     }
   };
 
-  if (!userinfos) {
+  if (!userInfo) {
     return <ErrorPage />;
   }
 
   return (
     <>
-      <Card className="">
+      <Card className="user-info-card">
         <div className="flex justify-end px-4 pt-4"></div>
-        <div className="flex flex-col items-center pb-10">
+        <div className="user-info-content flex flex-col items-center pb-10">
           <Avatar />
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-            {userinfos.firstname}
+            {userInfo.firstname}
           </h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {userinfos.lastname}
+            {userInfo.lastname}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {userinfos.email}
+            {userInfo.email}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {userinfos.zipCode}
+            {userInfo.zipCode}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {userinfos.Adress}
+            {userInfo.address}
           </span>
           <p className="mb-4 text-sm leading-relaxed text-blueGray-700">
-            👋 Hi !! I am {userinfos.firstname} nice to meet you
+            👋 Hi !! I am {userInfo.firstname} nice to meet you
           </p>
           <div className="mt-4 flex space-x-3 lg:mt-6">
             <AdminEditUserModal />
             <DeleteUserPopupModal
               deleteUser={deleteUser}
-              firstname={userinfos.firstname}
+              firstname={userInfo.firstname}
             />
           </div>
         </div>
