@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import ShoppingProductCard from "../components/ShoppingProductCard";
 import { userInfos } from "../context";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
+import { MdDeleteForever } from "react-icons/md";
 
 function ShoppingCart() {
   const { enqueueSnackbar } = useSnackbar();
   const { userId, username } = userInfos();
   const [shoppingCart, setShoppingCart] = useState([]);
   const [pay, setPay] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [productQuantity, setProductQuantity] = useState();
 
   useEffect(() => {
     const fetchUserCartProducts = async () => {
@@ -46,29 +46,13 @@ function ShoppingCart() {
         variant: "success",
         autoHideDuration: 2000,
       });
+      console.log(productId);
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Erreur lors de la suppression du produit du panier", {
         variant: "error",
         autoHideDuration: 2000,
       });
-    }
-  };
-
-  const handleAddQty = async (productId) => {
-    try {
-      const response = await axios.post(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/products/${userId}/updateProductQuantity/add`,
-        {
-          productId: "660fc404be865742a050a1ff",
-        }
-      );
-      setQuantity(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error adding product quantity:", error);
     }
   };
 
@@ -99,41 +83,97 @@ function ShoppingCart() {
       return 0;
     }
     return shoppingCart
-      .reduce((acc, product) => acc + product.product.price * quantity, 0)
+      .reduce(
+        (acc, product) => acc + product.product.price * product.quantity,
+        0
+      )
       .toFixed(2);
   };
 
-  const incrementQuantity = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+  const incrementQuantity = (productId) => {
+    setShoppingCart((prevCart) =>
+      prevCart.map((product) =>
+        product._id === productId
+          ? { ...product, quantity: product.quantity + 1 }
+          : product
+      )
+    );
   };
 
-  const decrementQuantity = () => {
-    if (quantity > 1) {
-      setQuantity((prevQuantity) => prevQuantity - 1);
-    }
+  const decrementQuantity = (productId) => {
+    setShoppingCart((prevCart) =>
+      prevCart.map((product) =>
+        product._id === productId && product.quantity > 1
+          ? { ...product, quantity: product.quantity - 1 }
+          : product
+      )
+    );
   };
 
   return (
     <section className="cart-wrapper mx-auto ">
       <div className="cart-header text-3xl font-bold pl-10 mt-16 mb-8 text-gray-900 dark:text-black ">
         Shopping Cart de {username}
+        <p className="items-incart text-gray-600 text-sm mt-2 ml">
+          il y a actuellement{" "}
+          <span className="text-orange-500">{shoppingCart.length}</span>{" "}
+          elements dans votre panier
+        </p>
       </div>
       <div className="border border-b-1"></div>
       <div className="items-wrapper flex w-screen mt-5">
         <div className="cart-content w-screen">
           {Array.isArray(shoppingCart) && shoppingCart.length > 0 ? (
             shoppingCart.map((product, index) => (
-              <ShoppingProductCard
-                key={index}
-                Products={product}
-                RemoveProductFromCart={removeProductFromCart}
-                Quantity={product.quantity}
-                incrementQuantity={() => incrementQuantity(product._id)}
-                decrementQuantity={() => decrementQuantity(product._id)}
-                setQuantity={(newQuantity) =>
-                  handleSetQuantity(product._id, newQuantity)
-                }
-              />
+              <div
+                key={product.product._id}
+                className="card p-4 w-full flex flex-row items-center justify-between shadow-xl text-black "
+              >
+                <div className="left-content flex items-center">
+                  <div className="items-image mr-3">
+                    <img
+                      className="px-2 pt-2 pb-3 rounded-2xl h-[100px]"
+                      src={`${import.meta.env.VITE_SERVER_URL}/${
+                        product.product.images[0]
+                      }`}
+                      alt="product image"
+                    />
+                  </div>
+                  <div className="items-text flex flex-col">
+                    <h1 className="items-title text-lg font-bold">
+                      {product.product.name}
+                    </h1>
+                    <div className="items-description text-xs mr-4 w-[750px]">
+                      {product.product.description
+                        .split(" ")
+                        .slice(0, 30)
+                        .join(" ")}
+                    </div>
+                  </div>
+                </div>
+                <div className="right-content flex items-center gap-5">
+                  <div className="items-quantity justify-center flex">
+                    <button onClick={() => incrementQuantity(product._id)}>
+                      +
+                    </button>
+                    <div className="quantity-display">{product.quantity}</div>
+                    <button onClick={() => decrementQuantity(product._id)}>
+                      -
+                    </button>
+                  </div>
+                  <div className="items-price font-extrabold">
+                    $ {product.product.price * product.quantity}
+                  </div>
+                  <div className="items-button text-lg">
+                    <button
+                      className="items-delete hover:text-red-600"
+                      onClick={() => removeProductFromCart(product._id)}
+                    >
+                      <MdDeleteForever />
+                    </button>
+                  </div>
+                </div>
+              </div>
             ))
           ) : (
             <div className="empty-cart flex flex-col justify-center items-center ">

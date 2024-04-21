@@ -23,7 +23,6 @@ function ProductDetails() {
           `${import.meta.env.VITE_SERVER_URL}/products/${productId}`
         );
         setProduct(response.data);
-        setQuantity(response.data.quantity);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
