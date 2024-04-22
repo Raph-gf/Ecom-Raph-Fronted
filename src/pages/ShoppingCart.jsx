@@ -12,14 +12,6 @@ function ShoppingCart() {
   const { userId, username } = userInfos();
   const [shoppingCart, setShoppingCart] = useState([]);
   const [pay, setPay] = useState(null);
-  const [productQuantity, setProductQuantity] = useState(() => {
-    // Calculer la somme initiale des quantités dans le panier
-    const initialQuantity = shoppingCart.reduce(
-      (acc, product) => acc + product.quantity,
-      0
-    );
-    return initialQuantity;
-  });
 
   useEffect(() => {
     const fetchUserCartProducts = async () => {
@@ -67,7 +59,7 @@ function ShoppingCart() {
     try {
       const lineItems = shoppingCart.map((product) => ({
         productId: product.product._id,
-        quantity: productQuantity,
+        quantity: product.quantity,
       }));
       console.log(lineItems);
       const response = await axios.post(
@@ -111,7 +103,6 @@ function ShoppingCart() {
           : product
       )
     );
-    setProductQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = (productId) => {
@@ -122,7 +113,6 @@ function ShoppingCart() {
           : product
       )
     );
-    setProductQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
   };
 
   return (
