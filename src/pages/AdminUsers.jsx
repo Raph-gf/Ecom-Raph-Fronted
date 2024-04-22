@@ -10,7 +10,7 @@ function AdminUsers() {
   const { token } = userInfos();
 
   useEffect(() => {
-    const getAllUsers = async () => {
+    const fetchAllUsers = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/admin/user/allusers`,
@@ -26,12 +26,12 @@ function AdminUsers() {
         console.error("Error fetching Users", error);
       }
     };
-    getAllUsers();
+    fetchAllUsers();
   }, [token]);
 
   return (
     <>
-      <div className="users-container flex items-center gap-10 justify-start text-3xl pb-3 px-12 mt-16 mb-10">
+      <div className="users-section flex items-center gap-10 justify-start text-3xl pb-3 px-12 mt-16 mb-10">
         <h1>Users</h1>
         <CreateUserModal />
       </div>

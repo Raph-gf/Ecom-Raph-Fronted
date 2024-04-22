@@ -17,10 +17,9 @@ function ProductInfos() {
   const { userId, token } = userInfos();
 
   const { productID } = useParams();
-  console.log(productID);
 
   useEffect(() => {
-    const infos = async () => {
+    const fetchProductInfo = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/products/${productID}`
@@ -32,8 +31,9 @@ function ProductInfos() {
       }
     };
 
-    infos();
+    fetchProductInfo();
   }, [productID]);
+
   if (!product) {
     return <ErrorPage />;
   }
@@ -66,27 +66,20 @@ function ProductInfos() {
 
   return (
     <>
-      <div className="product-container ">
-        <div className="flex flex-row justify-between  gap-4 px-12 py-10 md:flex-no-wrap">
+      <div className="product-info-container">
+        <div className="flex flex-row justify-between gap-4 px-12 py-10 md:flex-no-wrap">
           {/* Section de l'image du produit */}
-          <div className="product-image md:w-1/2 md:mb-0">
+          <div className="product-image-container md:w-1/2 md:mb-0">
             <div className="rounded-lg h-[700px] bg-gray-200">
               <Carousel pauseOnHover>
-                <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={`http://localhost:3456/${product.images[0]}`}
-                  alt="Product Image"
-                />
-                <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={`http://localhost:3456/${product.images[1]}`}
-                  alt="Product Image"
-                />
-                <img
-                  className="w-full h-full object-fill rounded-lg"
-                  src={`http://localhost:3456/${product.images[2]}`}
-                  alt="Product Image"
-                />
+                {product.images.map((image, index) => (
+                  <img
+                    key={index}
+                    className="w-full h-full object-fill rounded-lg"
+                    src={`http://localhost:3456/${image}`}
+                    alt={`Product Image ${index + 1}`}
+                  />
+                ))}
               </Carousel>
             </div>
           </div>
@@ -113,20 +106,20 @@ function ProductInfos() {
             </div>
             <div className="product-price flex pb-8 mb-4">
               <div className="text-black">
-                <span className="price-value text-5xl  font-bold text-black">
+                <span className="price-value text-5xl font-bold text-black">
                   ${product.price}
                 </span>
               </div>
             </div>
 
             <div className="btn-wrapper flex gap-3">
-              <button className="btn-deleteProduct ">
+              <button className="btn-delete-product">
                 <DeleteProductPopup
                   className="rounded-xl bg-red-500 hover:bg-red-600"
                   deleteProduct={deleteProduct}
                 />
               </button>
-              <button className="btn-editProduct rounded-xl bg-orange-200">
+              <button className="btn-edit-product rounded-xl bg-orange-200">
                 <AdminEditProductModal />
               </button>
             </div>

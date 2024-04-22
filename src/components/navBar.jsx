@@ -4,11 +4,14 @@ import { IoCart } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "flowbite-react";
 import { userInfos } from "../context";
+import { useEffect } from "react";
 
 function NavBar() {
   const iconStyles = { fontSize: "1.3em" };
   const navigate = useNavigate();
   const { username, userId, userRole } = userInfos();
+
+  useEffect(() => {}, []);
 
   const Logout = () => {
     localStorage.removeItem("user");
@@ -164,7 +167,8 @@ function NavBar() {
                     </button>
                   </Link>
                 </li>
-                {userRole ? (
+
+                {userRole === "user" ? (
                   <>
                     <li>
                       <Link
